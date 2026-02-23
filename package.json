@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@base-ui/react": "^1.2.0",
+    "@tanstack/react-form-nextjs": "^1.28.3",
+    "ai": "^6.0.97",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.575.0",
