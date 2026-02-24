@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     siteName: "AI Feedbacks",
     images: [
       {
-        url: "/logo.png",
+        url: "/image.png",
         width: 1200,
         height: 630,
         alt: "AI Feedbacks OG Image",
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     title: "AI Feedbacks | Transform Bugs into AI Prompts",
     description: "Upload your UI error or issue screenshot, and let Gemini construct the perfect prompt for a coding agent to fix it instantly.",
     creator: "@bhaumic",
-    images: ["/logo.png"],
+    images: ["/image.png"],
   },
   robots: {
     index: true,

@@ -2,6 +2,9 @@
 
 AI Feedbacks is a state-of-the-art web application designed to transform application issues and bugs into actionable prompts for coding agents. Built with **Next.js 15**, **Tailwind CSS v4**, and powered by **Google's Gemini 3 Flash Preview**, it offers a seamless way to bridge the gap between reporting an issue and fixing it.
 
+![Banner](public/image.png)
+
+
 ## 🚀 Features
 
 -   **AI Prompt Generation**: Upload a screenshot and provide a description of any bug. Gemini analyzes the visual and textual context to craft a perfect, copy-pasteable prompt for your favorite coding agent.
