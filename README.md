@@ -1,36 +1,68 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AI Feedbacks 🤖✨
 
-## Getting Started
+AI Feedbacks is a state-of-the-art web application designed to transform application issues and bugs into actionable prompts for coding agents. Built with **Next.js 15**, **Tailwind CSS v4**, and powered by **Google's Gemini 3 Flash Preview**, it offers a seamless way to bridge the gap between reporting an issue and fixing it.
 
-First, run the development server:
+## 🚀 Features
+
+-   **AI Prompt Generation**: Upload a screenshot and provide a description of any bug. Gemini analyzes the visual and textual context to craft a perfect, copy-pasteable prompt for your favorite coding agent.
+-   **Natural Language Search**: Don't remember the exact issue? Search through feedbacks using semantic, natural language queries powered by AI.
+-   **Monochrome Aesthetic**: A premium, high-contrast monochrome design system (Black, White, and `#87ae73` accent) with light and dark mode support.
+-   **Modern Interaction**: Smooth animations with `framer-motion` and a responsive, glassmorphic layout.
+-   **Optimistic UI**: Instant feedback on form submissions for a snappy user experience.
+
+## 🛠️ Tech Stack
+
+-   **Framework**: [Next.js](https://nextjs.org/) (App Router)
+-   **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
+-   **AI Engine**: [Google Gemini 3 Flash Preview](https://deepmind.google/technologies/gemini/) via [Vercel AI SDK](https://sdk.vercel.ai/)
+-   **Components**: [Shadcn UI](https://ui.shadcn.com/)
+-   **State & Forms**: [@tanstack/react-form](https://tanstack.com/form/latest)
+-   **Animations**: [Framer Motion](https://www.framer.com/motion/)
+
+## 🔑 Getting Started
+
+### 1. Prerequisites
+
+Ensure you have [Bun](https://bun.sh/) or Node.js installed on your system.
+
+### 2. Installation
+
+Clone the repository and install dependencies:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+bun install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 3. Configuration (Gemini API Key)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+To use the AI features, you need a Gemini API key.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1.  Go to the [Google AI Studio](https://aistudio.google.com/) and create a new API key.
+2.  Create a `.env.local` file in the root of your project.
+3.  Add your API key to the file:
 
-## Learn More
+```env
+GEMINI_AI_API_KEY=your_actual_api_key_here
+```
 
-To learn more about Next.js, take a look at the following resources:
+### 4. Running the Development Server
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Start the app locally:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+bun run dev
+```
 
-## Deploy on Vercel
+Open [http://localhost:3000](http://localhost:3000) (or the port shown in your terminal) to see the result.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📁 Project Structure
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+-   `app/api/`: Backend routes handling AI logic and storage.
+-   `components/`: Reusable UI components and layout elements.
+-   `lib/`: Core utilities including local JSON storage logic.
+-   `public/`: Static assets including your custom logo and uploads.
+-   `data/`: Local persistent store for feedback entries.
+
+## 📝 License
+
+Built with 💖 by bhaumic. Enjoy hacking!
