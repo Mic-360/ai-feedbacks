@@ -14,7 +14,7 @@ export default function Home() {
             <div className="absolute top-20 right-20 w-[300px] h-[300px] bg-foreground/5 rounded blur-[100px] pointer-events-none opacity-40" />
             <div className="absolute bottom-20 left-20 w-[400px] h-[400px] bg-primary/5 rounded blur-[100px] pointer-events-none opacity-40" />
 
-            <div className="z-10 container max-w-5xl mx-auto flex flex-col items-center text-center">
+            <div className="z-10 container mx-auto flex flex-col items-center text-center">
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}

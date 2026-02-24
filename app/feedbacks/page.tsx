@@ -86,7 +86,7 @@ export default function FeedbacksPage() {
     const displayedFeedbacks = searchResults !== null ? searchResults : feedbacks;
 
     return (
-        <div className="container mx-auto px-4 py-12 max-w-6xl flex-1 flex flex-col pt-8 space-y-8">
+        <div className="container mx-auto px-4 py-12 flex-1 flex flex-col pt-8 space-y-8">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-border/50">
                 <div>
                     <h1 className="font-heading text-4xl font-extrabold tracking-tight text-foreground">
