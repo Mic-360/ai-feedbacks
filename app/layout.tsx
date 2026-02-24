@@ -15,9 +15,52 @@ const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://ai-feedbacks.example.com";
+
 export const metadata: Metadata = {
-  title: "AI Feedbacks | Next-Gen Issue Resolution",
-  description: "Upload your issue, and let Gemini construct the perfect prompt for a coding agent.",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "AI Feedbacks | Transform Bugs into AI Prompts",
+    template: "%s | AI Feedbacks",
+  },
+  description: "Upload your UI error or issue screenshot, and let Gemini construct the perfect prompt for a coding agent to fix it instantly.",
+  keywords: ["AI", "Feedback", "Debugging", "Gemini", "Coding Agent", "Developer Tools", "Prompt Engineering"],
+  authors: [{ name: "bhaumic", url: siteUrl }],
+  creator: "bhaumic",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: siteUrl,
+    title: "AI Feedbacks | Transform Bugs into AI Prompts",
+    description: "Upload your UI error or issue screenshot, and let Gemini construct the perfect prompt for a coding agent to fix it instantly.",
+    siteName: "AI Feedbacks",
+    images: [
+      {
+        url: "/logo.png",
+        width: 1200,
+        height: 630,
+        alt: "AI Feedbacks OG Image",
+      }
+    ]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "AI Feedbacks | Transform Bugs into AI Prompts",
+    description: "Upload your UI error or issue screenshot, and let Gemini construct the perfect prompt for a coding agent to fix it instantly.",
+    creator: "@bhaumic",
+    images: ["/logo.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
 };
 
 export default function RootLayout({
@@ -28,6 +71,24 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`} suppressHydrationWarning>
       <body className="antialiased min-h-screen flex flex-col bg-background text-foreground selection:bg-primary/30">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebApplication",
+              "name": "AI Feedbacks",
+              "description": "Transform UI bugs and errors into highly optimized prompts for coding agents using Gemini 3.",
+              "url": siteUrl,
+              "applicationCategory": "DeveloperApplication",
+              "operatingSystem": "All",
+              "author": {
+                "@type": "Person",
+                "name": "bhaumic",
+              },
+            })
+          }}
+        />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
