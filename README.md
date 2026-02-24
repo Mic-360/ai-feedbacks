@@ -8,6 +8,7 @@ AI Feedbacks is a state-of-the-art web application designed to transform applica
 ## 🚀 Features
 
 -   **AI Prompt Generation**: Upload a screenshot and provide a description of any bug. Gemini analyzes the visual and textual context to craft a perfect, copy-pasteable prompt for your favorite coding agent.
+-   **Extension Integration**: An optional Chrome Extension captures precisely cropped screenshots, unhandled promise rejections, DOM state, and network logs straight from your active browser tab allowing you to skip manual uploads.
 -   **Natural Language Search**: Don't remember the exact issue? Search through feedbacks using semantic, natural language queries powered by AI.
 -   **Monochrome Aesthetic**: A premium, high-contrast monochrome design system (Black, White, and `#87ae73` accent) with light and dark mode support.
 -   **Modern Interaction**: Smooth animations with `framer-motion` and a responsive, glassmorphic layout.
@@ -21,6 +22,7 @@ AI Feedbacks is a state-of-the-art web application designed to transform applica
 -   **Components**: [Shadcn UI](https://ui.shadcn.com/)
 -   **State & Forms**: [@tanstack/react-form](https://tanstack.com/form/latest)
 -   **Animations**: [Framer Motion](https://www.framer.com/motion/)
+-   **Extension**: Manifest V3, React, [Vite CRX](https://crxjs.dev/vite-plugin)
 
 ## 🔑 Getting Started
 
@@ -57,6 +59,28 @@ bun run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) (or the port shown in your terminal) to see the result.
+
+## 🧩 Extension Setup (Optional)
+
+AI Feedbacks includes a powerful companion Chrome Extension that you can use to capture issues seamlessly. 
+
+1. Navigate to the extension folder and install dependencies:
+```bash
+cd extension
+bun install
+```
+
+2. Build the extension bundle:
+```bash
+bun run build
+```
+
+3. Open your Chromium-based browser (Chrome, Edge, Brave, etc).
+4. Go to `chrome://extensions/`
+5. Turn on **Developer mode** in the top right.
+6. Click **Load unpacked** in the top left.
+7. Select the `extension/dist` folder from this project directory.
+8. Start capturing bugs directly from any webpage you are working on!
 
 ## 📁 Project Structure
 
