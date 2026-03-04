@@ -66,7 +66,7 @@ DOM Snapshot (Length): ${data.dom.length} characters
 
                         formData.append('description', fullDesc);
 
-                        const response = await fetch('http://localhost:3000/api/feedback/add', {
+                        const response = await fetch('https://ai-feedbacks.bhaumicsingh.tech/api/feedback/add', {
                             method: 'POST',
                             body: formData
                         });
