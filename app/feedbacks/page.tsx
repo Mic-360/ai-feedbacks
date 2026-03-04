@@ -22,6 +22,29 @@ export default function FeedbacksPage() {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [searchResults, setSearchResults] = useState<FeedbackData[] | null>(null);
 
+    // ── API Key state (persisted in localStorage) ──────────────────────────────
+    const [apiKey, setApiKey] = useState("");
+    const [apiKeyVisible, setApiKeyVisible] = useState(false);
+    const [apiKeyPanelOpen, setApiKeyPanelOpen] = useState(false);
+
+    useEffect(() => {
+        const stored = localStorage.getItem("gemini_api_key") ?? "";
+        setApiKey(stored);
+        // Auto-open the panel if no key is saved yet
+        if (!stored) setApiKeyPanelOpen(true);
+    }, []);
+
+    const saveApiKey = () => {
+        localStorage.setItem("gemini_api_key", apiKey.trim());
+        setApiKeyPanelOpen(false);
+    };
+
+    const clearApiKey = () => {
+        setApiKey("");
+        localStorage.removeItem("gemini_api_key");
+    };
+    // ──────────────────────────────────────────────────────────────────────────
+
     useEffect(() => {
         fetch("/api/feedback")
             .then((res) => res.json())
@@ -53,9 +76,12 @@ export default function FeedbacksPage() {
         }
         setIsSearching(true);
         try {
+            const headers: Record<string, string> = { "Content-Type": "application/json" };
+            if (apiKey.trim()) headers["X-Api-Key"] = apiKey.trim();
+
             const res = await fetch("/api/feedback/search", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers,
                 body: JSON.stringify({ query: searchQuery }),
             });
             const data = await res.json();
@@ -87,6 +113,80 @@ export default function FeedbacksPage() {
 
     return (
         <div className="container mx-auto px-4 py-12 flex-1 flex flex-col pt-8 space-y-8">
+
+            {/* ── API Key Panel ──────────────────────────────────────────────── */}
+            <div className="rounded border border-border/50 bg-background/40 backdrop-blur-md overflow-hidden">
+                <button
+                    onClick={() => setApiKeyPanelOpen((o) => !o)}
+                    className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors"
+                >
+                    <span className="flex items-center gap-2">
+                        <span className={`w-2 h-2 rounded-full ${apiKey ? "bg-primary" : "bg-destructive"}`} />
+                        Gemini API Key
+                        {apiKey && (
+                            <span className="text-xs font-normal text-muted-foreground/60">— saved</span>
+                        )}
+                    </span>
+                    <span className="text-xs text-muted-foreground/60">{apiKeyPanelOpen ? "▲ collapse" : "▼ expand"}</span>
+                </button>
+
+                {apiKeyPanelOpen && (
+                    <div className="px-4 pb-4 pt-1 border-t border-border/40 space-y-3">
+                        <p className="text-xs text-muted-foreground leading-relaxed">
+                            Paste your{" "}
+                            <a
+                                href="https://aistudio.google.com/apikey"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-primary underline underline-offset-2 hover:text-primary/80"
+                            >
+                                Google AI Studio
+                            </a>{" "}
+                            API key. It is stored only in your browser&apos;s localStorage and sent directly to the server with each request — never persisted server-side.
+                        </p>
+                        <div className="flex gap-2">
+                            <div className="relative flex-1">
+                                <Input
+                                    id="gemini-api-key-input"
+                                    type={apiKeyVisible ? "text" : "password"}
+                                    placeholder="AIza..."
+                                    value={apiKey}
+                                    onChange={(e) => setApiKey(e.target.value)}
+                                    onKeyDown={(e) => { if (e.key === "Enter") saveApiKey(); }}
+                                    className="pr-20 font-mono text-sm bg-background/50 h-10"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setApiKeyVisible((v) => !v)}
+                                    className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-muted-foreground hover:text-foreground transition-colors px-1"
+                                >
+                                    {apiKeyVisible ? "hide" : "show"}
+                                </button>
+                            </div>
+                            <Button
+                                type="button"
+                                onClick={saveApiKey}
+                                disabled={!apiKey.trim()}
+                                className="h-10 px-4 text-sm font-semibold text-black"
+                            >
+                                Save
+                            </Button>
+                            {apiKey && (
+                                <Button
+                                    type="button"
+                                    variant="ghost"
+                                    onClick={clearApiKey}
+                                    className="h-10 px-3 text-sm text-muted-foreground hover:text-destructive"
+                                >
+                                    Clear
+                                </Button>
+                            )}
+                        </div>
+                    </div>
+                )}
+            </div>
+            {/* ──────────────────────────────────────────────────────────────── */}
+
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-border/50">
                 <div>
                     <h1 className="font-heading text-4xl font-extrabold tracking-tight text-foreground">
@@ -173,6 +273,7 @@ export default function FeedbacksPage() {
                             </DialogDescription>
                         </DialogHeader>
                         <AddFeedbackForm
+                            apiKey={apiKey}
                             onOptimistic={handleOptimisticSubmit}
                             onSuccess={handleSuccessSubmit}
                         />

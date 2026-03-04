@@ -9,10 +9,12 @@ import { Upload, X, Loader2, ImagePlus } from "lucide-react";
 
 export function AddFeedbackForm({
     onSuccess,
-    onOptimistic
+    onOptimistic,
+    apiKey = "",
 }: {
     onSuccess: (tempId: string, feedback: any) => void;
     onOptimistic: (optimisticData: any) => void;
+    apiKey?: string;
 }) {
     const [file, setFile] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -44,8 +46,12 @@ export function AddFeedbackForm({
             formData.append("description", desc);
 
             try {
+                const headers: Record<string, string> = {};
+                if (apiKey.trim()) headers["X-Api-Key"] = apiKey.trim();
+
                 const res = await fetch("/api/feedback/add", {
                     method: "POST",
+                    headers,
                     body: formData,
                 });
 

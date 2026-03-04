@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { streamText } from "ai";
-import { google } from "@/lib/ai";
+import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { saveImageLocally, saveFeedback } from "@/lib/storage";
 
 function generateRandomAlphanumeric(length: number) {
@@ -14,6 +14,13 @@ function generateRandomAlphanumeric(length: number) {
 
 export async function POST(req: Request) {
     try {
+        // Resolve API key: user-supplied header takes precedence over env variable
+        const apiKey = req.headers.get("X-Api-Key") || process.env.GEMINI_AI_API_KEY;
+        if (!apiKey) {
+            return NextResponse.json({ error: "No Gemini API key provided. Please add your API key on the Feedbacks page." }, { status: 401 });
+        }
+        const google = createGoogleGenerativeAI({ apiKey });
+
         const formData = await req.formData();
         const image = formData.get("image") as File;
         const description = formData.get("description") as string;

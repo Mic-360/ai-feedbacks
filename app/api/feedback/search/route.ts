@@ -1,11 +1,18 @@
 import { NextResponse } from "next/server";
 import { generateText, Output } from "ai";
-import { google } from "@/lib/ai";
+import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { getFeedbacks } from "@/lib/storage";
 import { z } from "zod";
 
 export async function POST(req: Request) {
     try {
+        // Resolve API key: user-supplied header takes precedence over env variable
+        const apiKey = req.headers.get("X-Api-Key") || process.env.GEMINI_AI_API_KEY;
+        if (!apiKey) {
+            return NextResponse.json({ error: "No Gemini API key provided. Please add your API key on the Feedbacks page." }, { status: 401 });
+        }
+        const google = createGoogleGenerativeAI({ apiKey });
+
         const { query } = await req.json();
 
         if (!query || typeof query !== 'string') {
@@ -25,7 +32,7 @@ export async function POST(req: Request) {
         }
 
         const { output } = await generateText({
-            model: google("gemini-3-flash"),
+            model: google("gemini-3-flash-preview"),
             output: Output.object({
                 schema: z.object({
                     matchingKeys: z.array(z.string()).describe("The array of 'key' values (like 'issue-xyz1') from the provided JSON that are semantically relevant to the user's natural language search query.")
