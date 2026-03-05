@@ -38,19 +38,7 @@ Clone the repository and install dependencies:
 bun install
 ```
 
-### 3. Configuration (Gemini API Key)
-
-To use the AI features, you need a Gemini API key.
-
-1.  Go to the [Google AI Studio](https://aistudio.google.com/) and create a new API key.
-2.  Create a `.env.local` file in the root of your project.
-3.  Add your API key to the file:
-
-```env
-GEMINI_AI_API_KEY=your_actual_api_key_here
-```
-
-### 4. Running the Development Server
+### 3. Running the Development Server
 
 Start the app locally:
 
