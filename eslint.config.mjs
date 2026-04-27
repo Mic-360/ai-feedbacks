@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Extension has its own toolchain (Vite + crxjs) and tsconfig.
+    "extension/**",
   ]),
 ]);
 
