@@ -126,19 +126,26 @@ export function ChatModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="!max-w-4xl w-full h-[80vh] sm:!max-w-4xl flex flex-col p-0 gap-0">
-        <DialogHeader className="p-3 border-b border-border/40">
-          <DialogTitle>Project chat</DialogTitle>
-          <div className="mt-2">
+      <DialogContent className="!max-w-4xl w-full h-[80vh] sm:!max-w-4xl flex flex-col p-0 gap-0 bg-[var(--paper)] text-[var(--ink)] border border-[var(--rule-strong)] !rounded-none">
+        <DialogHeader className="p-5 border-b border-[var(--rule)]">
+          <div className="eyebrow-mute mb-1">№ III — The Correspondence</div>
+          <DialogTitle
+            className="serif-display !text-[26px]"
+            style={{ letterSpacing: "-0.02em", lineHeight: 1, fontWeight: 500 }}
+          >
+            The Correspondence
+          </DialogTitle>
+          <div className="mt-3">
+            <label className="eyebrow-mute block mb-1">Publication</label>
             <Combobox
               items={projects.map((p) => p.slug)}
               value={slug ?? ""}
               onValueChange={(v) => typeof v === "string" && setSlug(v)}
             >
-              <ComboboxInput placeholder="Select a project…" />
+              <ComboboxInput placeholder="Select a publication…" className="!border-0 !border-b !border-[var(--rule)] !rounded-none focus:!border-[var(--ink)] !bg-transparent !px-0" />
               <ComboboxContent>
                 <ComboboxList>
-                  <ComboboxEmpty>No projects.</ComboboxEmpty>
+                  <ComboboxEmpty>No publications.</ComboboxEmpty>
                   {projects.map((p) => (
                     <ComboboxItem key={p.slug} value={p.slug}>
                       {p.slug}
@@ -151,8 +158,8 @@ export function ChatModal({
         </DialogHeader>
 
         {!slug ? (
-          <div className="flex-1 flex items-center justify-center text-xs text-muted-foreground">
-            Pick a project to start chatting.
+          <div className="flex-1 flex items-center justify-center ms-cap text-[var(--mute)]">
+            Choose a publication to begin correspondence.
           </div>
         ) : (
           <div className="flex-1 flex overflow-hidden">
