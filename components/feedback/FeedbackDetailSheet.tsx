@@ -157,15 +157,13 @@ export function FeedbackDetailSheet({
             <div className='grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1 overflow-hidden p-6'>
               {/* Left 5 — image, description, logs */}
               <div className='lg:col-span-5 flex flex-col gap-6 overflow-y-auto pr-2'>
-                <div className='border border-(--rule) overflow-hidden bg-secondary'>
                   <Image
                     src={`/api/image/${data.feedback.imageKey}`}
                     alt='Feedback screenshot'
-                    className='w-full h-auto object-contain'
+                    className='w-full h-auto object-center'
                     width={800}
                     height={600}
                   />
-                </div>
 
                 <div>
                   <div className='eyebrow mb-3'>The Description</div>

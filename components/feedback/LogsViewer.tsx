@@ -39,7 +39,7 @@ export function LogsViewer({ text }: { text: string }) {
   const monoFont = { fontFamily: "var(--font-mono), ui-monospace, monospace" } as React.CSSProperties;
 
   return (
-    <Tabs defaultValue="console" className="w-full flex flex-col gap-2">
+    <Tabs defaultValue="console" className="w-full flex flex-col gap-6">
       <TabsList variant="line" className="gap-0! border-0! flex flex-wrap">
         <TabsTrigger value="console" className={triggerCls}>
           I. Console ({logs.console.length})
