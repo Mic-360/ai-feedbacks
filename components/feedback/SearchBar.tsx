@@ -46,35 +46,44 @@ export function SearchBar({
   }
 
   return (
-    <div className="flex flex-col gap-1 w-full">
+    <div className="flex flex-col gap-2 w-full">
       <form
         onSubmit={(e) => {
           e.preventDefault();
           submit();
         }}
-        className="flex gap-2 w-full"
+        className="flex flex-col sm:flex-row gap-3 sm:items-end w-full"
       >
-        <div className="relative flex-1">
-          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground pointer-events-none" />
-          <Input
+        <div className="flex-1">
+          <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Ask about your feedbacks: e.g. 'login button issues'"
-            className="pl-8"
+            placeholder="e.g. login button issues, broken nav on mobile, slow checkout…"
+            className="w-full bg-transparent border-0 border-b border-[var(--rule)] focus:border-[var(--ink)] outline-none px-0 py-2 text-base serif-body italic placeholder:text-[var(--mute)] transition-colors"
           />
         </div>
-        <Button type="submit" disabled={pending || !query.trim()}>
-          {pending ? <Loader2 className="animate-spin" /> : <Search />}
-          Search
+        <Button
+          type="submit"
+          variant="editorial"
+          disabled={pending || !query.trim()}
+          className="h-9 px-4"
+        >
+          {pending ? <Loader2 className="animate-spin size-3" /> : null}
+          File Query →
         </Button>
         {(query || pending) && (
-          <Button type="button" variant="ghost" onClick={clear}>
-            <X />
-            Clear
+          <Button
+            type="button"
+            variant="editorial-ghost"
+            onClick={clear}
+            className="h-9 px-3"
+            style={{ fontStyle: "italic", textTransform: "none", letterSpacing: 0, fontFamily: "var(--font-body)" }}
+          >
+            Reset
           </Button>
         )}
       </form>
-      {error && <p className="text-xs text-destructive">{error}</p>}
+      {error && <p className="text-[11px] italic serif-body marker">{error}</p>}
     </div>
   );
 }
