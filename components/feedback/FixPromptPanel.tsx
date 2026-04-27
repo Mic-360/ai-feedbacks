@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { useEffect, useMemo, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Loader2, Check, ChevronDown } from "lucide-react";
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
-  DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
-import type { FixVersion } from "@/lib/fix-prompt-md";
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import type { FixVersion } from '@/lib/fix-prompt-md';
+import { Check, ChevronDown, Loader2 } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
 
 export function FixPromptPanel({
   projectSlug,
@@ -24,7 +24,7 @@ export function FixPromptPanel({
   contextReady: boolean;
   onVersionsChanged?: (versions: FixVersion[]) => void;
 }) {
-  const [streaming, setStreaming] = useState<string>("");
+  const [streaming, setStreaming] = useState<string>('');
   const [isStreaming, setIsStreaming] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
@@ -42,28 +42,28 @@ export function FixPromptPanel({
       const v = versions.find((x) => x.v === selectedV);
       if (v) return v.body;
     }
-    return versions[0]?.body ?? "";
+    return versions[0]?.body ?? '';
   }, [streaming, isStreaming, selectedV, versions]);
 
   async function generate() {
     if (!contextReady) return;
     setError(null);
-    setStreaming("");
+    setStreaming('');
     setIsStreaming(true);
     try {
       const res = await fetch(
         `/api/feedback/${feedbackId}/generate-fix?projectSlug=${encodeURIComponent(projectSlug)}`,
-        { method: "POST" },
+        { method: 'POST' },
       );
       if (!res.ok || !res.body) {
         const data = (await res.json().catch(() => ({}))) as { error?: string };
-        setError(data.error ?? "failed to generate");
+        setError(data.error ?? 'failed to generate');
         setIsStreaming(false);
         return;
       }
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
-      let acc = "";
+      let acc = '';
       while (true) {
         const { value, done } = await reader.read();
         if (done) break;
@@ -73,7 +73,7 @@ export function FixPromptPanel({
       // refetch fixVersions
       const fresh = await fetch(
         `/api/feedback/${feedbackId}?projectSlug=${encodeURIComponent(projectSlug)}`,
-        { cache: "no-store" },
+        { cache: 'no-store' },
       );
       if (fresh.ok) {
         const data = (await fresh.json()) as { fixVersions?: FixVersion[] };
@@ -83,7 +83,7 @@ export function FixPromptPanel({
         }
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "stream failed");
+      setError(err instanceof Error ? err.message : 'stream failed');
     } finally {
       setIsStreaming(false);
     }
@@ -97,26 +97,44 @@ export function FixPromptPanel({
   }
 
   return (
-    <div className="flex flex-col gap-3 h-full">
-      <div className="flex items-center gap-2 flex-wrap">
-        <Button variant="editorial" onClick={generate} disabled={!contextReady || isStreaming} className="h-9 px-4">
-          {isStreaming ? <Loader2 className="animate-spin size-3" /> : null}
-          {isStreaming ? "Drafting Verdict…" : versions.length ? "Redraft Verdict →" : "Generate Fix →"}
+    <div className='flex flex-col gap-3 h-full'>
+      <div className='flex items-center gap-2 flex-wrap'>
+        <Button
+          variant='editorial'
+          onClick={generate}
+          disabled={!contextReady || isStreaming}
+          className='h-9 px-4'
+        >
+          {isStreaming ? <Loader2 className='animate-spin size-3' /> : null}
+          {isStreaming
+            ? 'Drafting Verdict…'
+            : versions.length
+              ? 'Redraft Verdict →'
+              : 'Generate Fix →'}
         </Button>
-        <Button variant="editorial-ghost" onClick={copy} disabled={!current} className="h-9 px-4">
-          {copied ? <Check className="size-3" /> : null}
-          {copied ? "Copied" : "Copy →"}
+        <Button
+          variant='editorial-ghost'
+          onClick={copy}
+          disabled={!current}
+          className='h-9 px-4'
+        >
+          {copied ? <Check className='size-3' /> : null}
+          {copied ? 'Copied' : 'Copy →'}
         </Button>
         {versions.length > 0 && !isStreaming && (
           <DropdownMenu>
             <DropdownMenuTrigger
               render={
-                <Button variant="editorial-ghost" className="ml-auto h-9 px-3">
-                  v{selectedV ?? versions[0]!.v} <ChevronDown className="size-3" />
+                <Button
+                  variant='editorial-ghost'
+                  className='ml-auto h-9 px-3'
+                >
+                  v{selectedV ?? versions[0]!.v}{' '}
+                  <ChevronDown className='size-3' />
                 </Button>
               }
             />
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align='end'>
               {versions.map((v) => (
                 <DropdownMenuItem
                   key={v.v}
@@ -131,31 +149,38 @@ export function FixPromptPanel({
       </div>
 
       {!contextReady && (
-        <p className="ms-cap text-[var(--mute)] border border-[var(--rule)] p-3">
-          House style still being composed. Drafting will resume once it is ready.
+        <p className='ms-cap text-[var(--mute)] border border-[var(--rule)] p-3'>
+          House style still being composed. Drafting will resume once it is
+          ready.
         </p>
       )}
 
       {error && (
-        <p className="text-xs marker italic serif-body" role="alert">
+        <p
+          className='text-xs marker italic serif-body'
+          role='alert'
+        >
           {error}
         </p>
       )}
 
       <div
-        className="flex-1 border border-[var(--rule)] overflow-auto"
-        style={{ background: "#fbf7ee" }}
+        className='flex-1 border border-[var(--rule)] overflow-auto'
+        style={{ background: 'var(--paper-soft)' }}
       >
         <pre
-          className="p-4 whitespace-pre-wrap break-words"
+          className='p-4 whitespace-pre-wrap break-words'
           style={{
-            fontFamily: "var(--font-mono), ui-monospace, monospace",
-            fontSize: "13px",
+            fontFamily: 'var(--font-mono), ui-monospace, monospace',
+            fontSize: '13px',
             lineHeight: 1.6,
-            color: "var(--ink)",
+            color: 'var(--ink)',
           }}
         >
-          {current || (isStreaming ? "…" : "No verdict on file. Press Generate Fix to draft one.")}
+          {current ||
+            (isStreaming
+              ? '…'
+              : 'No verdict on file. Press Generate Fix to draft one.')}
         </pre>
       </div>
     </div>
