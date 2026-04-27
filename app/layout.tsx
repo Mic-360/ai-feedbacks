@@ -85,16 +85,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`} suppressHydrationWarning>
-      <body className="antialiased min-h-screen flex flex-col bg-background text-foreground selection:bg-primary/30">
+    <html
+      lang="en"
+      className={`${fraunces.variable} ${newsreader.variable} ${monaSans.variable} ${jetMono.variable}`}
+      suppressHydrationWarning
+    >
+      <body className="antialiased min-h-screen flex flex-col bg-[var(--paper)] text-[var(--ink)] selection:bg-[var(--ink)] selection:text-[var(--paper)]">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "WebApplication",
-              "name": "AI Feedbacks",
-              "description": "Transform UI bugs and errors into highly optimized prompts for coding agents using Gemini 3.",
+              "name": "AI Feedbacks Dispatch",
+              "description": "A private editorial gazette of incoming bug-reports.",
               "url": siteUrl,
               "applicationCategory": "DeveloperApplication",
               "operatingSystem": "All",
@@ -111,7 +115,6 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="fixed inset-0 z-[-1] bg-background bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(135,174,115,0.15),rgba(255,255,255,0))]" />
           <Navbar />
           <main className="flex-1 flex flex-col relative w-full">
             {children}
