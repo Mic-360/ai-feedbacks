@@ -12,9 +12,6 @@ export function Navbar() {
                     <span className="font-heading text-xl font-bold tracking-tight">AI Feedbacks</span>
                 </Link>
                 <nav className="flex items-center gap-4">
-                    <Link href="/feedbacks" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
-                        Explore
-                    </Link>
                     <ThemeToggle />
                 </nav>
             </div>
