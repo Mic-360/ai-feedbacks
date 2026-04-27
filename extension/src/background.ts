@@ -1,92 +1,84 @@
-chrome.runtime.onMessage.addListener((request, sender) => {
-    if (request.action === 'CAPTURE_SCREENSHOT') {
-        chrome.tabs.captureVisibleTab(sender.tab?.windowId as number, { format: 'png' }, (dataUrl) => {
-            const captureData = {
-                image: dataUrl,
-                rect: request.rect,
-                dom: request.dom,
-                logs: request.logs
-            };
+type Rect = { x: number; y: number; width: number; height: number; dpr: number };
 
-            // Immediately ask the content script to show the description dialog
-            if (sender.tab?.id) {
-                chrome.tabs.sendMessage(sender.tab.id, {
-                    action: 'SHOW_SUBMIT_DIALOG',
-                    captureData
-                });
-            }
-        });
-    } else if (request.action === 'SUBMIT_FEEDBACK_BACKGROUND') {
-        const { description, captureData } = request;
+type CaptureResponse = {
+    ok: boolean;
+    dataUrl?: string;
+    rect?: Rect;
+    fallback?: boolean;
+    error?: string;
+};
 
-        // We must crop the image in the background utilizing an offscreen document or a background canvas technique
-        // Since MV3 background service workers lack DOM Canvas, we will pass the uncropped image + rect coordinates 
-        // straight to the API (which can be handled there, but we will approximate it or let Next.js handle it if possible!)
-        // However, a simpler workaround is to simply fetch the data uri and let the user attach the whole view. Let's do a simple 
-        // fetch with the full image for now to prevent MV3 canvas limitations, OR we can execute a script in the active tab to crop it.
-
-        // Better: let's inject a script to the sender tab to crop and upload!
-        if (sender.tab?.id) {
-            chrome.scripting.executeScript({
-                target: { tabId: sender.tab.id },
-                func: async (desc, data) => {
-                    function cropImage(base64: string, rect: any): Promise<string> {
-                        return new Promise((resolve) => {
-                            const img = new Image();
-                            img.onload = () => {
-                                const canvas = document.createElement('canvas');
-                                canvas.width = rect.width;
-                                canvas.height = rect.height;
-                                const ctx = canvas.getContext('2d');
-                                ctx?.drawImage(img, rect.x, rect.y, rect.width, rect.height, 0, 0, rect.width, rect.height);
-                                resolve(canvas.toDataURL('image/png'));
-                            };
-                            img.src = base64;
-                        });
-                    }
-
-                    try {
-                        const croppedImage = await cropImage(data.image, data.rect);
-                        const res = await fetch(croppedImage);
-                        const blob = await res.blob();
-                        const file = new File([blob], 'screenshot.png', { type: 'image/png' });
-
-                        const formData = new FormData();
-                        formData.append('image', file);
-
-                        const fullDesc = `
-User Description: ${desc}
-
----
-Console Logs:
-${data.logs.length ? data.logs.join('\n') : 'None'}
-
-DOM Snapshot (Length): ${data.dom.length} characters
-                        `.trim();
-
-                        formData.append('description', fullDesc);
-
-                        const response = await fetch('https://ai-feedbacks.bhaumicsingh.tech/api/feedback/add', {
-                            method: 'POST',
-                            body: formData
-                        });
-
-                        if (response.ok) {
-                            return true;
-                        }
-                    } catch (e) {
-                        return false;
-                    }
-                    return false;
-                },
-                args: [description, captureData]
-            }).then((results) => {
-                if (results[0].result === true && sender.tab?.id) {
-                    chrome.tabs.sendMessage(sender.tab.id, {
-                        action: 'SHOW_SUCCESS_TOAST'
-                    });
-                }
-            });
+function blobToDataUrl(blob: Blob, mime: string): Promise<string> {
+    return blob.arrayBuffer().then((buffer) => {
+        const bytes = new Uint8Array(buffer);
+        let binary = '';
+        const chunk = 0x8000;
+        for (let i = 0; i < bytes.length; i += chunk) {
+            const slice = bytes.subarray(i, i + chunk);
+            binary += String.fromCharCode.apply(null, Array.from(slice) as number[]);
         }
+        const base64 = btoa(binary);
+        return `data:${mime};base64,${base64}`;
+    });
+}
+
+async function captureAndCrop(windowId: number | undefined, rect: Rect): Promise<CaptureResponse> {
+    const dataUrl = await new Promise<string>((resolve, reject) => {
+        const cb = (url?: string) => {
+            const lastError = chrome.runtime.lastError;
+            if (lastError || !url) {
+                reject(new Error(lastError?.message || 'captureVisibleTab failed'));
+                return;
+            }
+            resolve(url);
+        };
+        if (typeof windowId === 'number') {
+            chrome.tabs.captureVisibleTab(windowId, { format: 'png' }, cb);
+        } else {
+            chrome.tabs.captureVisibleTab({ format: 'png' }, cb);
+        }
+    });
+
+    if (typeof OffscreenCanvas === 'undefined' || typeof createImageBitmap === 'undefined') {
+        return { ok: true, dataUrl, rect, fallback: true };
     }
+
+    try {
+        const fullBlob = await (await fetch(dataUrl)).blob();
+        const bitmap = await createImageBitmap(fullBlob);
+
+        const sx = Math.max(0, Math.floor(rect.x));
+        const sy = Math.max(0, Math.floor(rect.y));
+        const sw = Math.max(1, Math.min(Math.floor(rect.width), bitmap.width - sx));
+        const sh = Math.max(1, Math.min(Math.floor(rect.height), bitmap.height - sy));
+
+        const canvas = new OffscreenCanvas(sw, sh);
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+            bitmap.close();
+            return { ok: true, dataUrl, rect, fallback: true };
+        }
+        ctx.drawImage(bitmap, sx, sy, sw, sh, 0, 0, sw, sh);
+        bitmap.close();
+        const cropped = await canvas.convertToBlob({ type: 'image/png' });
+        const croppedDataUrl = await blobToDataUrl(cropped, 'image/png');
+        return { ok: true, dataUrl: croppedDataUrl };
+    } catch (e) {
+        const msg = e instanceof Error ? e.message : String(e);
+        return { ok: false, error: msg };
+    }
+}
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request && request.action === 'CAPTURE_AND_CROP') {
+        const rect = request.rect as Rect;
+        captureAndCrop(sender.tab?.windowId, rect)
+            .then((resp) => sendResponse(resp))
+            .catch((e) => {
+                const msg = e instanceof Error ? e.message : String(e);
+                sendResponse({ ok: false, error: msg } satisfies CaptureResponse);
+            });
+        return true;
+    }
+    return false;
 });
