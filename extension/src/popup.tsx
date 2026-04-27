@@ -153,158 +153,122 @@ function App() {
   };
 
   return (
-    <div
-      style={{ padding: 20, width: 340, fontFamily: 'system-ui, sans-serif' }}
-    >
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 12,
-          marginBottom: 12,
-        }}
+    <main className='popup-shell'>
+      <section
+        className='popup-card'
+        aria-label='AI Feedback Capturer'
       >
-        <img
-          src='/logo.png'
-          style={{ width: 32, height: 32, borderRadius: 8 }}
-        />
-        <h2 style={{ margin: 0, fontSize: 18 }}>AI Feedback Capturer</h2>
-      </div>
-      <p
-        style={{
-          fontSize: 13,
-          color: '#666',
-          lineHeight: 1.5,
-          margin: '0 0 12px 0',
-        }}
-      >
-        Capture a region of this page and send it to your registered project.
-      </p>
-
-      <div
-        style={{
-          fontSize: 12,
-          color: '#444',
-          background: '#f7f7f7',
-          padding: 10,
-          borderRadius: 6,
-          marginBottom: 12,
-          wordBreak: 'break-all',
-        }}
-      >
-        <div style={{ marginBottom: 4 }}>
-          <strong>Tab URL:</strong> {tabUrl || '(unknown)'}
-        </div>
-        <div>
-          <strong>Site:</strong>{' '}
-          {!editingBase && (
-            <>
-              <span>{siteBaseUrl}</span>{' '}
-              <a
-                href='#'
-                onClick={(e) => {
-                  e.preventDefault();
-                  setEditingBase(true);
-                }}
-                style={{ color: '#3366cc', fontSize: 12 }}
-              >
-                edit
-              </a>
-            </>
-          )}
-          {editingBase && (
-            <div style={{ display: 'flex', gap: 6, marginTop: 6 }}>
-              <input
-                value={baseDraft}
-                onChange={(e) => setBaseDraft(e.target.value)}
-                placeholder={DEFAULT_SITE_BASE_URL_CONST}
-                style={{
-                  flex: 1,
-                  padding: 6,
-                  fontSize: 12,
-                  border: '1px solid #ccc',
-                  borderRadius: 4,
-                }}
+        <div className='popup-card__inner'>
+          <header className='popup-header'>
+            <span
+              className='popup-logo-wrap'
+              aria-hidden='true'
+            >
+              <img
+                className='popup-logo'
+                src='/logo.png'
+                alt=''
               />
-              <button
-                onClick={saveBase}
-                style={{
-                  padding: '6px 10px',
-                  fontSize: 12,
-                  background: '#000',
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: 4,
-                  cursor: 'pointer',
-                }}
-              >
-                Save
-              </button>
-              <button
-                onClick={() => {
-                  setBaseDraft(siteBaseUrl);
-                  setEditingBase(false);
-                }}
-                style={{
-                  padding: '6px 10px',
-                  fontSize: 12,
-                  background: '#eee',
-                  color: '#333',
-                  border: '1px solid #ddd',
-                  borderRadius: 4,
-                  cursor: 'pointer',
-                }}
-              >
-                Cancel
-              </button>
+            </span>
+            <div className='popup-title-group'>
+              <p className='popup-kicker'>Capture assistant</p>
+              <h1 className='popup-title'>AI Feedback</h1>
             </div>
-          )}
-        </div>
-      </div>
+          </header>
 
-      <button
-        onClick={startCapture}
-        disabled={busy}
-        style={{
-          width: '100%',
-          padding: '12px',
-          background: '#000',
-          color: '#fff',
-          border: 'none',
-          borderRadius: '6px',
-          cursor: busy ? 'not-allowed' : 'pointer',
-          fontWeight: 600,
-          fontSize: 14,
-          opacity: busy ? 0.6 : 1,
-        }}
-      >
-        Capture from this page
-      </button>
-      {status && (
-        <p
-          style={{
-            marginTop: 12,
-            fontSize: 13,
-            color: '#555',
-            textAlign: 'center',
-          }}
-        >
-          {status}
-        </p>
-      )}
-      {errorMsg && (
-        <p
-          style={{
-            marginTop: 12,
-            fontSize: 13,
-            color: '#c0392b',
-            textAlign: 'center',
-          }}
-        >
-          {errorMsg}
-        </p>
-      )}
-    </div>
+          <p className='popup-description'>
+            Capture a region of this page and send it to your registered
+            project.
+          </p>
+
+          <label className='theme-row'>
+            <span>
+              <span className='theme-row__label'>Theme</span>
+              <span className='theme-row__hint'>
+                Use your preferred extension appearance.
+              </span>
+            </span>
+            <select
+              className='theme-select'
+              value={themePreference}
+              onChange={(e) =>
+                changeThemePreference(e.target.value as ThemePreference)
+              }
+              aria-label='Theme preference'
+            >
+              {THEME_PREFERENCES.map((preference) => (
+                <option
+                  key={preference}
+                  value={preference}
+                >
+                  {themeLabels[preference]}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <div className='info-panel'>
+            <div className='info-panel__row breakable'>
+              <strong>Tab URL:</strong> {tabUrl || '(unknown)'}
+            </div>
+            <div className='info-panel__row breakable'>
+              <strong>Site:</strong>{' '}
+              {!editingBase && (
+                <>
+                  <span>{siteBaseUrl}</span>{' '}
+                  <a
+                    href='#'
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setEditingBase(true);
+                    }}
+                    className='inline-link'
+                  >
+                    edit
+                  </a>
+                </>
+              )}
+              {editingBase && (
+                <div className='base-editor'>
+                  <input
+                    value={baseDraft}
+                    onChange={(e) => setBaseDraft(e.target.value)}
+                    placeholder={DEFAULT_SITE_BASE_URL_CONST}
+                    className='text-input'
+                  />
+                  <button
+                    onClick={saveBase}
+                    className='button button--primary button--small'
+                  >
+                    Save
+                  </button>
+                  <button
+                    onClick={() => {
+                      setBaseDraft(siteBaseUrl);
+                      setEditingBase(false);
+                    }}
+                    className='button button--secondary button--small'
+                  >
+                    Cancel
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <button
+            onClick={startCapture}
+            disabled={busy}
+            className='button button--primary'
+          >
+            {busy ? 'Preparing capture...' : 'Capture from this page'}
+          </button>
+
+          {status && <p className='status-message'>{status}</p>}
+          {errorMsg && <p className='error-message'>{errorMsg}</p>}
+        </div>
+      </section>
+    </main>
   );
 }
 
