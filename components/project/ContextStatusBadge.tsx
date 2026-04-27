@@ -1,40 +1,57 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
-import { Loader2 } from "lucide-react";
 import type { ContextJob } from "@/lib/projects";
 
 type State = ContextJob["state"] | "none";
 
-const labels: Record<State, string> = {
-  queued: "queued",
-  running: "running",
-  done: "context ready",
-  failed: "context failed",
-  none: "no context",
-};
-
 export function ContextStatusBadge({ state }: { state: State }) {
+  const baseCls = "inline-flex items-center gap-1.5 px-2 py-0.5 border text-[10px] font-medium uppercase";
+  const monoStyle: React.CSSProperties = {
+    fontFamily: "var(--font-ui), system-ui, sans-serif",
+    letterSpacing: "0.16em",
+  };
+
   if (state === "done") {
     return (
-      <Badge variant="default" className="bg-primary/15 text-primary border-primary/20">
-        {labels.done}
-      </Badge>
+      <span
+        className={baseCls}
+        style={{ ...monoStyle, color: "var(--accent-sage)", borderColor: "var(--accent-soft)" }}
+      >
+        Ready
+      </span>
     );
   }
   if (state === "failed") {
-    return <Badge variant="destructive">{labels.failed}</Badge>;
-  }
-  if (state === "queued") {
-    return <Badge variant="outline">{labels.queued}</Badge>;
-  }
-  if (state === "running") {
     return (
-      <Badge variant="outline" className="border-primary/30 text-primary">
-        <Loader2 className="size-3 animate-spin" />
-        {labels.running}
-      </Badge>
+      <span
+        className={baseCls}
+        style={{ ...monoStyle, color: "var(--marker)", borderColor: "var(--marker)" }}
+      >
+        Retired
+      </span>
     );
   }
-  return <Badge variant="ghost">{labels.none}</Badge>;
+  if (state === "queued" || state === "running") {
+    return (
+      <span
+        className={baseCls}
+        style={{ ...monoStyle, color: "var(--mute)", borderColor: "var(--rule)" }}
+      >
+        Indexing
+        <span className="inline-flex gap-[2px]">
+          <span className="pulse-dot inline-block w-[3px] h-[3px] bg-[var(--mute)]" />
+          <span className="pulse-dot inline-block w-[3px] h-[3px] bg-[var(--mute)]" />
+          <span className="pulse-dot inline-block w-[3px] h-[3px] bg-[var(--mute)]" />
+        </span>
+      </span>
+    );
+  }
+  return (
+    <span
+      className={baseCls}
+      style={{ ...monoStyle, color: "var(--mute)", borderColor: "var(--rule)" }}
+    >
+      Unfiled
+    </span>
+  );
 }
