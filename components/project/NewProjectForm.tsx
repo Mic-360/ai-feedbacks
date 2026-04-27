@@ -81,9 +81,16 @@ export function NewProjectForm() {
               onChange={(e) => field.handleChange(e.target.value)}
               placeholder="https://example.com"
               aria-invalid={field.state.meta.errors.length > 0}
+              className={inputCls}
             />
-            <FieldError errors={field.state.meta.errors.map((e: unknown) => ({ message: typeof e === "string" ? e : (e as { message?: string } | undefined)?.message }))} />
-          </Field>
+            {field.state.meta.errors.length > 0 && (
+              <p className="text-[11px] italic serif-body marker mt-1">
+                {typeof field.state.meta.errors[0] === "string"
+                  ? field.state.meta.errors[0]
+                  : (field.state.meta.errors[0] as { message?: string } | undefined)?.message}
+              </p>
+            )}
+          </div>
         )}
       </form.Field>
 
@@ -99,9 +106,11 @@ export function NewProjectForm() {
         }}
       >
         {(field) => (
-          <Field>
-            <FieldLabel htmlFor={field.name}>GitHub repo URL</FieldLabel>
-            <Input
+          <div className="flex flex-col gap-1">
+            <label htmlFor={field.name} className="eyebrow">
+              GitHub Repository
+            </label>
+            <input
               id={field.name}
               name={field.name}
               value={field.state.value}
