@@ -98,21 +98,21 @@ export function FixPromptPanel({
 
   return (
     <div className="flex flex-col gap-3 h-full">
-      <div className="flex items-center gap-2">
-        <Button onClick={generate} disabled={!contextReady || isStreaming}>
-          {isStreaming ? <Loader2 className="animate-spin" /> : <Sparkles />}
-          {isStreaming ? "Generating…" : versions.length ? "Regenerate fix" : "Generate fix"}
+      <div className="flex items-center gap-2 flex-wrap">
+        <Button variant="editorial" onClick={generate} disabled={!contextReady || isStreaming} className="h-9 px-4">
+          {isStreaming ? <Loader2 className="animate-spin size-3" /> : null}
+          {isStreaming ? "Drafting Verdict…" : versions.length ? "Redraft Verdict →" : "Generate Fix →"}
         </Button>
-        <Button variant="outline" onClick={copy} disabled={!current}>
-          {copied ? <Check /> : <Copy />}
-          {copied ? "Copied" : "Copy"}
+        <Button variant="editorial-ghost" onClick={copy} disabled={!current} className="h-9 px-4">
+          {copied ? <Check className="size-3" /> : null}
+          {copied ? "Copied" : "Copy →"}
         </Button>
         {versions.length > 0 && !isStreaming && (
           <DropdownMenu>
             <DropdownMenuTrigger
               render={
-                <Button variant="ghost" className="ml-auto">
-                  v{selectedV ?? versions[0]!.v} <ChevronDown />
+                <Button variant="editorial-ghost" className="ml-auto h-9 px-3">
+                  v{selectedV ?? versions[0]!.v} <ChevronDown className="size-3" />
                 </Button>
               }
             />
