@@ -69,9 +69,11 @@ export function NewProjectForm() {
         }}
       >
         {(field) => (
-          <Field>
-            <FieldLabel htmlFor={field.name}>Website URL</FieldLabel>
-            <Input
+          <div className="flex flex-col gap-1">
+            <label htmlFor={field.name} className="eyebrow">
+              Website URL
+            </label>
+            <input
               id={field.name}
               name={field.name}
               value={field.state.value}
