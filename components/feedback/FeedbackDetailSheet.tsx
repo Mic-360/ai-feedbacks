@@ -21,6 +21,23 @@ interface FeedbackDetailResponse {
   fixVersions: FixVersion[];
 }
 
+function firstSentence(s: string, max = 80): string {
+  const m = s.match(/^.{1,200}?[.!?](\s|$)/);
+  const t = (m ? m[0] : s).trim();
+  if (t.length <= max) return t;
+  return t.slice(0, max).trimEnd() + "…";
+}
+
+function longDate(iso: string): string {
+  try {
+    const d = new Date(iso);
+    const month = d.toLocaleString("en-US", { month: "short" }).toUpperCase();
+    return `${String(d.getDate()).padStart(2, "0")} ${month} · ${d.getFullYear()}`;
+  } catch {
+    return iso;
+  }
+}
+
 export function FeedbackDetailSheet({
   open,
   onOpenChange,
