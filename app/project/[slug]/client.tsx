@@ -146,29 +146,53 @@ export function ProjectClient({
             onDone={() => router.refresh()}
           />
         )}
-      </div>
+      </header>
 
-      <SearchBar projectSlug={project.slug} onResults={setMatchingIds} />
+      <hr className="border-t border-[var(--rule-strong)]" />
 
-      {filteredFeedbacks.length === 0 ? (
-        <div className="border border-dashed border-border/60 bg-muted/10 p-8 text-center">
-          <p className="text-sm text-muted-foreground">
-            {initialFeedbacks.length === 0
-              ? "No feedbacks yet. Capture some via the browser extension."
-              : "No feedbacks match your search."}
-          </p>
+      {/* Search */}
+      <section className="flex flex-col gap-3">
+        <div className="eyebrow">Search the Archive</div>
+        <SearchBar projectSlug={project.slug} onResults={setMatchingIds} />
+      </section>
+
+      <hr className="border-t border-[var(--rule)]" />
+
+      {/* Dispatches */}
+      <section className="flex flex-col gap-4">
+        <div className="flex items-baseline justify-between">
+          <h2 className="eyebrow">№ 02 — The Dispatches</h2>
+          <span className="ms-cap tnum text-[var(--mute)]">
+            {String(filteredFeedbacks.length).padStart(2, "0")} on file
+          </span>
         </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-          {filteredFeedbacks.map((f) => (
-            <FeedbackCard
-              key={f.id}
-              feedback={f}
-              onClick={() => setOpenFeedbackId(f.id)}
-            />
-          ))}
-        </div>
-      )}
+        <div className="border-t border-[var(--rule-strong)]" />
+
+        {filteredFeedbacks.length === 0 ? (
+          <div className="py-16 flex flex-col items-center gap-3 text-center">
+            <div className="flex items-center gap-3">
+              <span className="marker text-2xl serif-display">§</span>
+              <p className="serif-display italic" style={{ fontSize: "20px" }}>
+                {initialFeedbacks.length === 0
+                  ? "“No dispatches yet. The wire is quiet.”"
+                  : "“No dispatches match the present query.”"}
+              </p>
+              <span className="marker text-2xl serif-display">§</span>
+            </div>
+          </div>
+        ) : (
+          <div className="flex flex-col">
+            {filteredFeedbacks.map((f, idx) => (
+              <FeedbackCard
+                key={f.id}
+                feedback={f}
+                index={idx + 1}
+                onClick={() => setOpenFeedbackId(f.id)}
+              />
+            ))}
+          </div>
+        )}
+      </section>
 
       <FeedbackDetailSheet
         open={openFeedbackId !== null}
