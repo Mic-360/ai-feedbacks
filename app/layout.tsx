@@ -36,10 +36,10 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://ai-feedbacks.exampl
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "AI Feedbacks | Transform Bugs into AI Prompts",
-    template: "%s | AI Feedbacks",
+    default: "AI Feedbacks Dispatch | The Bug-Report Gazette",
+    template: "%s | AI Feedbacks Dispatch",
   },
-  description: "Upload your UI error or issue screenshot, and let Gemini construct the perfect prompt for a coding agent to fix it instantly.",
+  description: "A private editorial gazette of incoming bug-reports. File your publications and let the verdicts roll in.",
   keywords: ["AI", "Feedback", "Debugging", "Gemini", "Coding Agent", "Developer Tools", "Prompt Engineering"],
   authors: [{ name: "bhaumic", url: siteUrl }],
   creator: "bhaumic",
@@ -47,22 +47,22 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: siteUrl,
-    title: "AI Feedbacks | Transform Bugs into AI Prompts",
-    description: "Upload your UI error or issue screenshot, and let Gemini construct the perfect prompt for a coding agent to fix it instantly.",
-    siteName: "AI Feedbacks",
+    title: "AI Feedbacks Dispatch | The Bug-Report Gazette",
+    description: "A private editorial gazette of incoming bug-reports.",
+    siteName: "AI Feedbacks Dispatch",
     images: [
       {
         url: "/image.png",
         width: 1200,
         height: 630,
-        alt: "AI Feedbacks OG Image",
+        alt: "AI Feedbacks Dispatch OG Image",
       }
     ]
   },
   twitter: {
     card: "summary_large_image",
-    title: "AI Feedbacks | Transform Bugs into AI Prompts",
-    description: "Upload your UI error or issue screenshot, and let Gemini construct the perfect prompt for a coding agent to fix it instantly.",
+    title: "AI Feedbacks Dispatch | The Bug-Report Gazette",
+    description: "A private editorial gazette of incoming bug-reports.",
     creator: "@bhaumic",
     images: ["/image.png"],
   },
