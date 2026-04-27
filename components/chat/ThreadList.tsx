@@ -23,34 +23,40 @@ export function ThreadList({
   loading?: boolean;
 }) {
   return (
-    <div className="flex flex-col gap-1 border-r border-border/40 w-48 overflow-y-auto p-2 shrink-0">
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={onNewThread}
-        disabled={loading}
-      >
-        {loading ? <Loader2 className="animate-spin" /> : <Plus />} New thread
-      </Button>
-      <div className="flex flex-col gap-0.5 mt-2">
+    <div className="flex flex-col border-r border-[var(--rule)] w-56 overflow-y-auto shrink-0">
+      <div className="p-3 border-b border-[var(--rule)]">
+        <Button
+          variant="editorial-ghost"
+          size="sm"
+          onClick={onNewThread}
+          disabled={loading}
+          className="w-full h-9"
+        >
+          {loading ? <Loader2 className="animate-spin size-3" /> : null} New Correspondence →
+        </Button>
+      </div>
+      <div className="flex flex-col">
         {threads.length === 0 && (
-          <p className="text-[11px] text-muted-foreground text-center mt-2">
-            No threads yet.
+          <p className="ms-cap text-[var(--mute)] text-center mt-4 px-3 italic" style={{ fontFamily: "var(--font-body)", textTransform: "none", letterSpacing: 0 }}>
+            No correspondence yet.
           </p>
         )}
-        {threads.map((t) => (
+        {threads.map((t, i) => (
           <button
             key={t.threadId}
             type="button"
             onClick={() => onSelect(t.threadId)}
             className={cn(
-              "text-left text-xs px-2 py-1.5 truncate transition-colors",
+              "text-left px-3 py-3 truncate transition-colors border-b border-[var(--rule)] flex items-baseline gap-2",
               activeId === t.threadId
-                ? "bg-primary/10 text-foreground"
-                : "hover:bg-muted text-muted-foreground",
+                ? "bg-[var(--ink)] text-[var(--paper)]"
+                : "hover:bg-[rgba(0,0,0,0.03)] text-[var(--ink)]",
             )}
           >
-            {t.threadId}
+            <span className="ms-cap tnum opacity-70 shrink-0">№ {String(i + 1).padStart(2, "0")}</span>
+            <span className="serif-body truncate" style={{ fontSize: "14px" }}>
+              {t.threadId.slice(0, 12)}
+            </span>
           </button>
         ))}
       </div>
