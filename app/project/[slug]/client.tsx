@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Code2, Globe, RefreshCw, MessageCircle, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ContextStatusBadge } from "@/components/project/ContextStatusBadge";
 import { ContextJobProgress } from "@/components/project/ContextJobProgress";
@@ -12,6 +12,24 @@ import { SearchBar } from "@/components/feedback/SearchBar";
 import { ChatModal } from "@/components/chat/ChatModal";
 import type { ContextJob, Project } from "@/lib/projects";
 import type { Feedback } from "@/lib/feedbacks";
+
+function hostname(url: string): string {
+  try {
+    return new URL(url).hostname;
+  } catch {
+    return url;
+  }
+}
+
+function longDate(iso: string): string {
+  try {
+    const d = new Date(iso);
+    const month = d.toLocaleString("en-US", { month: "short" }).toUpperCase();
+    return `${String(d.getDate()).padStart(2, "0")} ${month} · ${d.getFullYear()}`;
+  } catch {
+    return iso;
+  }
+}
 
 export function ProjectClient({
   project,
