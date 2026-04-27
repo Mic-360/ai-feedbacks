@@ -2,13 +2,19 @@
 
 import { useEffect, useState } from "react";
 import type { ContextJob } from "@/lib/projects";
-import { Loader2 } from "lucide-react";
+
+const stageOrder: NonNullable<ContextJob["stage"]>[] = [
+  "fetching-tree",
+  "selecting-files",
+  "fetching-content",
+  "generating",
+];
 
 const stageLabels: Record<NonNullable<ContextJob["stage"]>, string> = {
-  "fetching-tree": "Fetching repo tree",
-  "selecting-files": "Selecting files",
+  "fetching-tree": "Fetching repository tree",
+  "selecting-files": "Selecting files of consequence",
   "fetching-content": "Fetching file contents",
-  "generating": "Generating context.md",
+  "generating": "Composing context.md",
 };
 
 export function ContextJobProgress({
