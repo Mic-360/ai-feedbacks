@@ -16,53 +16,58 @@ export default async function Home() {
   }
 
   return (
-    <div className="container mx-auto w-full px-4 py-12 flex flex-col gap-10">
-      <section className="flex flex-col items-center text-center gap-4">
-        <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 border border-primary/20 text-primary text-xs font-medium">
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/1/1d/Google_Gemini_icon_2025.svg"
-            alt="Gemini"
-            className="w-3.5 h-3.5"
-          />
-          Gemini 3 powered feedback workflow
+    <div className="container mx-auto w-full px-4 py-12 flex flex-col gap-12">
+      {/* Hero — № 01, THE PROPOSITION */}
+      <section className="flex flex-col gap-6">
+        <div className="eyebrow-mute tnum">№ 01 — The Proposition</div>
+        <div className="dropcap-block serif-body" style={{ fontSize: "22px", lineHeight: 1.5, textAlign: "justify", maxWidth: "62ch" }}>
+          A private editorial gazette of incoming bug-reports. File a publication, equip its house style, and the wire begins to hum — dispatches captured by your extension arrive here as field notes, then drafted into verdicts a coding agent can act on without ceremony.
         </div>
-        <h1 className="font-heading text-4xl sm:text-5xl font-extrabold tracking-tight max-w-3xl">
-          Per-project feedback, ready for{" "}
-          <span className="text-primary">your coding agent</span>
-        </h1>
-        <p className="text-sm sm:text-base text-muted-foreground max-w-2xl">
-          Register a website + GitHub repo. The browser extension captures issues, and Gemini
-          turns them into actionable fix prompts grounded in your codebase.
-        </p>
+        <div className="border-t border-[var(--rule)]" />
       </section>
 
-      <section className="flex justify-center">
-        <NewProjectForm />
-      </section>
+      {/* 5/7 split — File a new title + Table of contents */}
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+        <div className="lg:col-span-5 flex flex-col gap-4">
+          <div className="eyebrow">File a New Title</div>
+          <p className="serif-body italic text-[var(--mute)]" style={{ fontSize: "15px", lineHeight: 1.5 }}>
+            Register a publication and we will compose its house style.
+          </p>
+          <div className="border-t border-[var(--rule)] pt-5">
+            <NewProjectForm />
+          </div>
+        </div>
 
-      <section className="flex flex-col gap-3">
-        <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
-          Your projects
-        </h2>
-        {storageError && (
-          <div className="border border-destructive/40 bg-destructive/5 text-destructive p-3 text-xs">
-            <p className="font-semibold mb-1">Storage backend unreachable</p>
-            <p className="opacity-80">{storageError}</p>
+        <div className="lg:col-span-7 flex flex-col gap-3">
+          <div className="flex items-baseline justify-between">
+            <h2 className="eyebrow">The Table of Contents</h2>
+            <span className="ms-cap tnum text-[var(--mute)]">{String(projects.length).padStart(2, "0")} on file</span>
           </div>
-        )}
-        {projects.length === 0 ? (
-          <div className="border border-dashed border-border/60 bg-muted/10 p-8 text-center">
-            <p className="text-sm text-muted-foreground">
-              No projects yet. Register your first one above.
-            </p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {projects.map((p) => (
-              <ProjectCard key={p.slug} project={p} />
-            ))}
-          </div>
-        )}
+          <div className="border-t border-[var(--rule-strong)]" />
+          {storageError && (
+            <div className="border border-[var(--marker)] p-4 text-xs serif-body" role="alert">
+              <p className="eyebrow marker mb-1">Storage Backend Unreachable</p>
+              <p className="text-[var(--ink-soft)]">{storageError}</p>
+            </div>
+          )}
+          {projects.length === 0 && !storageError ? (
+            <div className="py-16 flex flex-col items-center gap-3 text-center">
+              <div className="flex items-center gap-3">
+                <span className="marker text-2xl serif-display">§</span>
+                <p className="serif-display italic" style={{ fontSize: "22px" }}>
+                  &ldquo;No publications on file. Begin with a title above.&rdquo;
+                </p>
+                <span className="marker text-2xl serif-display">§</span>
+              </div>
+            </div>
+          ) : (
+            <div className="flex flex-col">
+              {projects.map((p, idx) => (
+                <ProjectCard key={p.slug} project={p} index={idx + 1} />
+              ))}
+            </div>
+          )}
+        </div>
       </section>
     </div>
   );
