@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Search, X, Loader2 } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export function SearchBar({
