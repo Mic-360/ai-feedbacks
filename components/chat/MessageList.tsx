@@ -23,46 +23,50 @@ export function MessageList({
   pending?: string | null;
 }) {
   return (
-    <div className="flex flex-col gap-3 overflow-y-auto p-3 flex-1">
+    <div className="flex flex-col gap-6 overflow-y-auto p-6 flex-1">
       {messages.length === 0 && !pending && (
-        <p className="text-xs text-muted-foreground text-center mt-8">
-          Ask a question about this project.
+        <p className="serif-display italic text-center mt-8" style={{ fontSize: "20px", color: "var(--mute)" }}>
+          “Pose your first question to the wire.”
         </p>
       )}
       {messages.map((m, i) => (
-        <Bubble key={i} role={m.role} content={m.content} />
+        <MessageBlock key={i} role={m.role} content={m.content} ts={m.ts} />
       ))}
-      {pending && <Bubble role="assistant" content={pending} streaming />}
+      {pending && <MessageBlock role="assistant" content={pending} streaming />}
     </div>
   );
 }
 
-function Bubble({
+function MessageBlock({
   role,
   content,
+  ts,
   streaming,
 }: {
   role: ChatMessage["role"];
   content: string;
+  ts?: string;
   streaming?: boolean;
 }) {
+  const isUser = role === "user";
   return (
-    <div
-      className={cn(
-        "flex",
-        role === "user" ? "justify-end" : "justify-start",
-      )}
-    >
+    <div className={`flex flex-col gap-1 ${isUser ? "items-end" : "items-start"}`}>
+      <div className="ms-cap tnum text-[var(--mute)]">
+        {isUser ? "You" : "The Wire"}
+        {ts ? ` · ${shortStamp(ts)}` : ""}
+      </div>
       <div
-        className={cn(
-          "max-w-[85%] px-3 py-2 text-xs/relaxed whitespace-pre-wrap break-words",
-          role === "user"
-            ? "bg-primary text-primary-foreground"
-            : "bg-muted text-foreground border border-border/40",
-        )}
+        className={`serif-body whitespace-pre-wrap break-words max-w-[85%] ${
+          isUser ? "italic text-right" : ""
+        }`}
+        style={{
+          fontSize: "16px",
+          lineHeight: 1.55,
+          color: isUser ? "var(--accent-sage)" : "var(--ink)",
+        }}
       >
         {content}
-        {streaming && <span className="inline-block ml-1 animate-pulse">▍</span>}
+        {streaming && <span className="inline-block ml-1 animate-pulse marker">▍</span>}
       </div>
     </div>
   );
