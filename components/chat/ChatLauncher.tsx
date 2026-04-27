@@ -10,7 +10,7 @@ export function ChatLauncher() {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="fixed bottom-6 right-6 z-40 px-4 h-10 bg-[var(--ink)] text-[var(--paper)] hover:bg-[var(--ink-soft)] transition-colors"
+        className="fixed bottom-6 right-6 z-40 px-4 h-10 bg-(--ink) text-(--paper) hover:bg-(--ink-soft) transition-colors"
         style={{
           fontFamily: "var(--font-ui), system-ui, sans-serif",
           fontSize: "11px",

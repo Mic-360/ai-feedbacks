@@ -46,7 +46,7 @@ export function NewProjectForm() {
   });
 
   const inputCls =
-    "w-full bg-transparent border-0 border-b border-[var(--rule)] focus:border-[var(--ink)] outline-none px-0 py-2 text-base serif-body placeholder:text-[var(--mute)] placeholder:italic transition-colors";
+    "w-full bg-transparent border-0 border-b border-(--rule) focus:border-(--ink) outline-none px-0 py-2 text-base serif-body placeholder:text-(--mute) placeholder:italic transition-colors";
 
   return (
     <form

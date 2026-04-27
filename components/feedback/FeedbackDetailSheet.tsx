@@ -115,15 +115,15 @@ export function FeedbackDetailSheet({
     >
       <SheetContent
         side='right'
-        className='!max-w-none w-full sm:w-[95vw] md:w-[90vw] lg:w-[85vw] xl:w-[1280px] sm:!max-w-[1280px] overflow-hidden bg-[var(--paper)] text-[var(--ink)] border-l border-[var(--rule-strong)] p-0'
+        className='max-w-none! w-full sm:w-[95vw] md:w-[90vw] lg:w-[85vw] xl:w-[1280px] sm:max-w-[1280px]! overflow-hidden bg-(--paper) text-(--ink) border-l border-(--rule-strong) p-0'
       >
         <div className='flex flex-col h-full overflow-hidden'>
-          <SheetHeader className='px-6 pt-6 pb-4 border-b border-[var(--rule)]'>
+          <SheetHeader className='px-6 pt-6 pb-4 border-b border-(--rule)'>
             <div className='eyebrow-mute mb-1'>
               Dispatch № {data?.feedback.id.slice(0, 6).toUpperCase() ?? '—'}
             </div>
             <SheetTitle
-              className='serif-display !text-[30px]'
+              className='serif-display text-[30px]!'
               style={{
                 letterSpacing: '-0.02em',
                 lineHeight: 1.1,
@@ -132,13 +132,13 @@ export function FeedbackDetailSheet({
             >
               {data ? firstSentence(data.feedback.description) : 'Loading…'}
             </SheetTitle>
-            <SheetDescription className='ms-cap tnum text-[var(--mute)] mt-1'>
+            <SheetDescription className='ms-cap tnum text-(--mute) mt-1'>
               {data ? longDate(data.feedback.createdAt) : ''}
             </SheetDescription>
           </SheetHeader>
 
           {loading && (
-            <div className='flex items-center justify-center flex-1 text-[var(--mute)] ms-cap'>
+            <div className='flex items-center justify-center flex-1 text-(--mute) ms-cap'>
               <Loader2 className='animate-spin size-4 mr-2' /> Setting Type…
             </div>
           )}
@@ -156,7 +156,7 @@ export function FeedbackDetailSheet({
             <div className='grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1 overflow-hidden p-6'>
               {/* Left 5 — image, description, logs */}
               <div className='lg:col-span-5 flex flex-col gap-6 overflow-y-auto pr-2'>
-                <div className='border border-[var(--rule)] overflow-hidden bg-[var(--secondary)]'>
+                <div className='border border-(--rule) overflow-hidden bg-(--secondary)'>
                   <img
                     src={`/api/image/${data.feedback.imageKey}`}
                     alt='Dispatch screenshot'
@@ -184,7 +184,7 @@ export function FeedbackDetailSheet({
               <div className='lg:col-span-7 flex flex-col gap-3 overflow-hidden min-h-0'>
                 <div className='eyebrow'>The Verdict</div>
                 {data.fixVersions.length === 0 ? (
-                  <div className='border border-[var(--rule)] flex-1 flex items-center justify-center p-12'>
+                  <div className='border border-(--rule) flex-1 flex items-center justify-center p-12'>
                     <div className='flex items-center gap-3'>
                       <span className='marker text-2xl serif-display'>§</span>
                       <p

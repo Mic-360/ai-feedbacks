@@ -16,7 +16,7 @@ export function LogsViewer({ text }: { text: string }) {
 
   if (!parsed) {
     return (
-      <div className="border border-[var(--rule)] p-3 ms-cap text-[var(--mute)]">
+      <div className="border border-(--rule) p-3 ms-cap text-(--mute)">
         (logs unparseable)
       </div>
     );
@@ -30,9 +30,9 @@ export function LogsViewer({ text }: { text: string }) {
     : "(none)";
 
   const triggerCls =
-    "px-3 py-1.5 ms-cap border border-[var(--rule)] data-[state=active]:bg-[var(--ink)] data-[state=active]:text-[var(--paper)] data-[state=active]:border-[var(--ink)] hover:border-[var(--rule-strong)] -ml-px first:ml-0 transition-colors";
+    "px-3 py-1.5 ms-cap border border-(--rule) data-[state=active]:bg-(--ink) data-[state=active]:text-(--paper) data-[state=active]:border-(--ink) hover:border-(--rule-strong) -ml-px first:ml-0 transition-colors";
   const paneCls =
-    "border border-[var(--rule)] bg-[var(--secondary)]";
+    "border border-(--rule) bg-(--secondary)";
   const preCls =
     "p-3 text-[11px] whitespace-pre-wrap break-all";
 
@@ -40,7 +40,7 @@ export function LogsViewer({ text }: { text: string }) {
 
   return (
     <Tabs defaultValue="console" className="w-full flex flex-col gap-2">
-      <TabsList variant="line" className="!gap-0 !border-0 flex flex-wrap">
+      <TabsList variant="line" className="gap-0! border-0! flex flex-wrap">
         <TabsTrigger value="console" className={triggerCls}>
           I. Console ({logs.console.length})
         </TabsTrigger>

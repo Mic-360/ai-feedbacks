@@ -23,8 +23,8 @@ export function ThreadList({
   loading?: boolean;
 }) {
   return (
-    <div className='flex flex-col border-r border-[var(--rule)] w-56 overflow-y-auto shrink-0'>
-      <div className='p-3 border-b border-[var(--rule)]'>
+    <div className='flex flex-col border-r border-(--rule) w-56 overflow-y-auto shrink-0'>
+      <div className='p-3 border-b border-(--rule)'>
         <Button
           variant='editorial-ghost'
           size='sm'
@@ -39,7 +39,7 @@ export function ThreadList({
       <div className='flex flex-col'>
         {threads.length === 0 && (
           <p
-            className='ms-cap text-[var(--mute)] text-center mt-4 px-3 italic'
+            className='ms-cap text-(--mute) text-center mt-4 px-3 italic'
             style={{
               fontFamily: 'var(--font-body)',
               textTransform: 'none',
@@ -55,10 +55,10 @@ export function ThreadList({
             type='button'
             onClick={() => onSelect(t.threadId)}
             className={cn(
-              'text-left px-3 py-3 truncate transition-colors border-b border-[var(--rule)] flex items-baseline gap-2',
+              'text-left px-3 py-3 truncate transition-colors border-b border-(--rule) flex items-baseline gap-2',
               activeId === t.threadId
-                ? 'bg-[var(--ink)] text-[var(--paper)]'
-                : 'hover:bg-[var(--hover-tint)] text-[var(--ink)]',
+                ? 'bg-(--ink) text-(--paper)'
+                : 'hover:bg-(--hover-tint) text-(--ink)',
             )}
           >
             <span className='ms-cap tnum opacity-70 shrink-0'>

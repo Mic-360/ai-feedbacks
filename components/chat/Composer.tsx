@@ -62,7 +62,7 @@ export function Composer({
   }
 
   return (
-    <div className='flex flex-col gap-2 border-t border-[var(--rule)] p-4 bg-[var(--paper)]'>
+    <div className='flex flex-col gap-2 border-t border-(--rule) p-4 bg-(--paper)'>
       {error && <p className='text-[11px] italic serif-body marker'>{error}</p>}
       <div className='flex gap-3 items-end'>
         <Textarea
@@ -75,7 +75,7 @@ export function Composer({
             }
           }}
           placeholder='Address the wire…'
-          className='flex-1 min-h-12 max-h-32 !border-0 !border-b !border-[var(--rule)] focus:!border-[var(--ink)] !bg-transparent !px-0 serif-body italic'
+          className='flex-1 min-h-12 max-h-32 border-0! border-b! border-(--rule)! focus:border-(--ink)! bg-transparent! px-0! serif-body italic'
         />
         <Button
           variant='editorial'

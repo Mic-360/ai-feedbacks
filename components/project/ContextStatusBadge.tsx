@@ -39,9 +39,9 @@ export function ContextStatusBadge({ state }: { state: State }) {
       >
         Indexing
         <span className="inline-flex gap-[2px]">
-          <span className="pulse-dot inline-block w-[3px] h-[3px] bg-[var(--mute)]" />
-          <span className="pulse-dot inline-block w-[3px] h-[3px] bg-[var(--mute)]" />
-          <span className="pulse-dot inline-block w-[3px] h-[3px] bg-[var(--mute)]" />
+          <span className="pulse-dot inline-block w-[3px] h-[3px] bg-(--mute)" />
+          <span className="pulse-dot inline-block w-[3px] h-[3px] bg-(--mute)" />
+          <span className="pulse-dot inline-block w-[3px] h-[3px] bg-(--mute)" />
         </span>
       </span>
     );

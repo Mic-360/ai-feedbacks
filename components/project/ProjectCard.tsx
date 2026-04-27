@@ -34,9 +34,9 @@ export function ProjectCard({
   return (
     <Link
       href={`/project/${project.slug}`}
-      className='group grid grid-cols-12 items-baseline gap-4 py-5 border-b border-[var(--rule)] transition-colors hover:bg-[var(--hover-tint)]'
+      className='group grid grid-cols-12 items-baseline gap-4 py-5 border-b border-(--rule) transition-colors hover:bg-(--hover-tint)'
     >
-      <div className='col-span-2 sm:col-span-1 ms-cap tnum text-[var(--mute)]'>
+      <div className='col-span-2 sm:col-span-1 ms-cap tnum text-(--mute)'>
         № {num}
       </div>
 
@@ -51,7 +51,7 @@ export function ProjectCard({
         >
           {hostname(project.websiteUrl)}
         </span>
-        <span className='ms-cap text-[var(--mute)] truncate'>
+        <span className='ms-cap text-(--mute) truncate'>
           {repoLabel(project.repoUrl)} &nbsp;·&nbsp; {project.feedbackCount}{' '}
           {project.feedbackCount === 1 ? 'dispatch' : 'dispatches'}
         </span>
@@ -59,7 +59,7 @@ export function ProjectCard({
 
       <div className='col-span-12 sm:col-span-3 flex items-center justify-end gap-3'>
         <ContextStatusBadge state={project.contextJobState} />
-        <span className='ms-cap text-[var(--ink)] transition-transform group-hover:translate-x-[2px]'>
+        <span className='ms-cap text-(--ink) transition-transform group-hover:translate-x-[2px]'>
           →
         </span>
       </div>

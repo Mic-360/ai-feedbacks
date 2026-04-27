@@ -8,10 +8,10 @@ function formatTime(d: Date): string {
 export function Footer() {
   const compiled = formatTime(new Date());
   return (
-    <footer className="w-full mt-auto bg-[var(--paper)]">
+    <footer className="w-full mt-auto bg-(--paper)">
       <div className="double-rule" />
       <div className="container mx-auto px-4 py-6">
-        <div className="ms-cap tnum text-[var(--mute)] text-center leading-relaxed">
+        <div className="ms-cap tnum text-(--mute) text-center leading-relaxed">
           Set in Fraunces, Newsreader, Mona Sans, and JetBrains Mono.
           <br className="sm:hidden" />
           <span className="hidden sm:inline"> &nbsp;·&nbsp; </span>
@@ -21,7 +21,7 @@ export function Footer() {
           All rights reserved. № Vol. I.
         </div>
       </div>
-      <div className="border-t border-[var(--rule)]" />
+      <div className="border-t border-(--rule)" />
     </footer>
   );
 }

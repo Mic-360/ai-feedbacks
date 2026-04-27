@@ -51,12 +51,12 @@ function MessageBlock({
   const isUser = role === "user";
   return (
     <div className={`flex flex-col gap-1 ${isUser ? "items-end" : "items-start"}`}>
-      <div className="ms-cap tnum text-[var(--mute)]">
+      <div className="ms-cap tnum text-(--mute)">
         {isUser ? "You" : "The Wire"}
         {ts ? ` · ${shortStamp(ts)}` : ""}
       </div>
       <div
-        className={`serif-body whitespace-pre-wrap break-words max-w-[85%] ${
+        className={`serif-body whitespace-pre-wrap wrap-break-word max-w-[85%] ${
           isUser ? "italic text-right" : ""
         }`}
         style={{

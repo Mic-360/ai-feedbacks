@@ -129,11 +129,11 @@ export function ChatModal({
       open={open}
       onOpenChange={onOpenChange}
     >
-      <DialogContent className='!max-w-4xl w-full h-[80vh] sm:!max-w-4xl flex flex-col p-0 gap-0 bg-[var(--paper)] text-[var(--ink)] border border-[var(--rule-strong)]'>
-        <DialogHeader className='p-5 border-b border-[var(--rule)]'>
+      <DialogContent className='max-w-4xl! w-full h-[80vh] sm:max-w-4xl! flex flex-col p-0 gap-0 bg-(--paper) text-(--ink) border border-(--rule-strong)'>
+        <DialogHeader className='p-5 border-b border-(--rule)'>
           <div className='eyebrow-mute mb-1'>№ III — The Correspondence</div>
           <DialogTitle
-            className='serif-display !text-[26px]'
+            className='serif-display text-[26px]!'
             style={{ letterSpacing: '-0.02em', lineHeight: 1, fontWeight: 500 }}
           >
             The Correspondence
@@ -147,7 +147,7 @@ export function ChatModal({
             >
               <ComboboxInput
                 placeholder='Select a publication…'
-                className='!border-0 !border-b !border-[var(--rule)] focus:!border-[var(--ink)] !bg-transparent !px-0'
+                className='border-0! border-b! border-(--rule)! focus:border-(--ink)! bg-transparent! px-0!'
               />
               <ComboboxContent>
                 <ComboboxList>
@@ -167,7 +167,7 @@ export function ChatModal({
         </DialogHeader>
 
         {!slug ? (
-          <div className='flex-1 flex items-center justify-center ms-cap text-[var(--mute)]'>
+          <div className='flex-1 flex items-center justify-center ms-cap text-(--mute)'>
             Choose a publication to begin correspondence.
           </div>
         ) : (
@@ -181,11 +181,11 @@ export function ChatModal({
             />
             <div className='flex-1 flex flex-col overflow-hidden'>
               {!activeThreadId ? (
-                <div className='flex-1 flex items-center justify-center ms-cap text-[var(--mute)]'>
+                <div className='flex-1 flex items-center justify-center ms-cap text-(--mute)'>
                   Select or open a new correspondence.
                 </div>
               ) : !thread ? (
-                <div className='flex-1 flex items-center justify-center ms-cap text-[var(--mute)]'>
+                <div className='flex-1 flex items-center justify-center ms-cap text-(--mute)'>
                   <Loader2 className='size-4 animate-spin mr-2' /> Setting Type…
                 </div>
               ) : (

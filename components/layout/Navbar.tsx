@@ -18,11 +18,11 @@ export function Navbar() {
   const dateLine = formatMastDate(now);
 
   return (
-    <header className="w-full bg-[var(--paper)]">
-      <div className="border-t border-[var(--rule)]" />
+    <header className="w-full bg-(--paper)">
+      <div className="border-t border-(--rule)" />
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-3 items-center gap-4 py-5">
-          <div className="ms-cap text-[var(--ink)] tnum">
+          <div className="ms-cap text-(--ink) tnum">
             VOL. I &nbsp;·&nbsp; ISSUE №&nbsp;{issue}
           </div>
 
@@ -38,13 +38,13 @@ export function Navbar() {
             >
               AI Feedbacks Dispatch
             </span>
-            <span className="ms-cap mt-1 text-[var(--mute)]" style={{ letterSpacing: "0.18em" }}>
+            <span className="ms-cap mt-1 text-(--mute)" style={{ letterSpacing: "0.18em" }}>
               The Bug·Report Gazette — Est. 2026
             </span>
           </Link>
 
           <div className="flex items-center justify-end gap-4">
-            <span className="ms-cap tnum text-[var(--ink)] hidden sm:inline">{dateLine}</span>
+            <span className="ms-cap tnum text-(--ink) hidden sm:inline">{dateLine}</span>
             <ThemeToggle />
           </div>
         </div>

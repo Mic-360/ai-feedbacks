@@ -59,9 +59,9 @@ export function ContextJobProgress({
 
   if (job.state === "failed") {
     return (
-      <div className="border border-[var(--marker)] p-4 text-xs">
+      <div className="border border-(--marker) p-4 text-xs">
         <p className="eyebrow marker mb-1">Indexing Filed for Failure</p>
-        {job.error && <p className="serif-body text-[var(--ink-soft)] mt-1">{job.error}</p>}
+        {job.error && <p className="serif-body text-(--ink-soft) mt-1">{job.error}</p>}
       </div>
     );
   }
@@ -71,18 +71,18 @@ export function ContextJobProgress({
   const stageText = job.stage ? stageLabels[job.stage] : "Queued for indexing";
 
   return (
-    <div className="border border-[var(--rule)] p-4 flex flex-col gap-3">
+    <div className="border border-(--rule) p-4 flex flex-col gap-3">
       <div className="eyebrow tnum">
         Indexing in Progress — Stage {String(stageNum).padStart(2, "0")} of 04
       </div>
-      <div className="grid grid-cols-4 border border-[var(--rule)]">
+      <div className="grid grid-cols-4 border border-(--rule)">
         {stageOrder.map((s, i) => {
           const active = i === activeIdx;
           const done = i < activeIdx;
           return (
             <div
               key={s}
-              className={`px-2 py-2 text-center ms-cap tnum ${i > 0 ? "border-l border-[var(--rule)]" : ""}`}
+              className={`px-2 py-2 text-center ms-cap tnum ${i > 0 ? "border-l border-(--rule)" : ""}`}
               style={{
                 background: active ? "var(--ink)" : done ? "var(--secondary)" : "transparent",
                 color: active ? "var(--paper)" : done ? "var(--ink)" : "var(--mute)",
@@ -93,7 +93,7 @@ export function ContextJobProgress({
           );
         })}
       </div>
-      <p className="serif-body italic text-[var(--ink-soft)] text-sm">{stageText}…</p>
+      <p className="serif-body italic text-(--ink-soft) text-sm">{stageText}…</p>
     </div>
   );
 }

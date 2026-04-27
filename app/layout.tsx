@@ -90,7 +90,7 @@ export default function RootLayout({
       className={`${fraunces.variable} ${newsreader.variable} ${monaSans.variable} ${jetMono.variable}`}
       suppressHydrationWarning
     >
-      <body className="antialiased min-h-screen flex flex-col bg-[var(--paper)] text-[var(--ink)] selection:bg-[var(--ink)] selection:text-[var(--paper)]">
+      <body className="antialiased min-h-screen flex flex-col bg-(--paper) text-(--ink) selection:bg-(--ink) selection:text-(--paper)">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

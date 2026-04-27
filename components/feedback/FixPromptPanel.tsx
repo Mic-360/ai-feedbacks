@@ -149,7 +149,7 @@ export function FixPromptPanel({
       </div>
 
       {!contextReady && (
-        <p className='ms-cap text-[var(--mute)] border border-[var(--rule)] p-3'>
+        <p className='ms-cap text-(--mute) border border-(--rule) p-3'>
           House style still being composed. Drafting will resume once it is
           ready.
         </p>
@@ -165,11 +165,11 @@ export function FixPromptPanel({
       )}
 
       <div
-        className='flex-1 border border-[var(--rule)] overflow-auto'
+        className='flex-1 border border-(--rule) overflow-auto'
         style={{ background: 'var(--paper-soft)' }}
       >
         <pre
-          className='p-4 whitespace-pre-wrap break-words'
+          className='p-4 whitespace-pre-wrap wrap-break-word'
           style={{
             fontFamily: 'var(--font-mono), ui-monospace, monospace',
             fontSize: '13px',

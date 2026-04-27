@@ -59,7 +59,7 @@ export function SearchBar({
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="e.g. login button issues, broken nav on mobile, slow checkout…"
-            className="w-full bg-transparent border-0 border-b border-[var(--rule)] focus:border-[var(--ink)] outline-none px-0 py-2 text-base serif-body italic placeholder:text-[var(--mute)] transition-colors"
+            className="w-full bg-transparent border-0 border-b border-(--rule) focus:border-(--ink) outline-none px-0 py-2 text-base serif-body italic placeholder:text-(--mute) transition-colors"
           />
         </div>
         <Button

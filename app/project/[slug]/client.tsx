@@ -88,37 +88,37 @@ export function ProjectClient({
           {hostname(project.websiteUrl)}
         </h1>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-2 border-t border-[var(--rule)]">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-2 border-t border-(--rule)">
           <div className="lg:col-span-5 flex flex-col gap-2 pt-3">
-            <div className="ms-cap text-[var(--mute)]">
-              Established &nbsp;·&nbsp; <span className="text-[var(--ink)]">{longDate(project.createdAt)}</span>
+            <div className="ms-cap text-(--mute)">
+              Established &nbsp;·&nbsp; <span className="text-(--ink)">{longDate(project.createdAt)}</span>
             </div>
-            <div className="ms-cap text-[var(--mute)] truncate">
+            <div className="ms-cap text-(--mute) truncate">
               Repository &nbsp;·&nbsp;{" "}
               <a
                 href={project.repoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[var(--ink)] hover:underline"
+                className="text-(--ink) hover:underline"
               >
                 {project.repoOwner} / {project.repoName}
               </a>
             </div>
           </div>
-          <div className="lg:col-span-7 flex flex-col gap-2 pt-3 lg:border-l lg:border-[var(--rule)] lg:pl-6">
-            <div className="ms-cap text-[var(--mute)] truncate">
+          <div className="lg:col-span-7 flex flex-col gap-2 pt-3 lg:border-l lg:border-(--rule) lg:pl-6">
+            <div className="ms-cap text-(--mute) truncate">
               Masthead URL &nbsp;·&nbsp;{" "}
               <a
                 href={project.websiteUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[var(--ink)] hover:underline"
+                className="text-(--ink) hover:underline"
               >
                 {project.websiteUrl}
               </a>
             </div>
             <div className="flex items-center gap-2">
-              <span className="ms-cap text-[var(--mute)]">House Style &nbsp;·&nbsp;</span>
+              <span className="ms-cap text-(--mute)">House Style &nbsp;·&nbsp;</span>
               <ContextStatusBadge state={job?.state ?? "none"} />
             </div>
           </div>
@@ -148,7 +148,7 @@ export function ProjectClient({
         )}
       </header>
 
-      <hr className="border-t border-[var(--rule-strong)]" />
+      <hr className="border-t border-(--rule-strong)" />
 
       {/* Search */}
       <section className="flex flex-col gap-3">
@@ -156,17 +156,17 @@ export function ProjectClient({
         <SearchBar projectSlug={project.slug} onResults={setMatchingIds} />
       </section>
 
-      <hr className="border-t border-[var(--rule)]" />
+      <hr className="border-t border-(--rule)" />
 
       {/* Dispatches */}
       <section className="flex flex-col gap-4">
         <div className="flex items-baseline justify-between">
           <h2 className="eyebrow">№ 02 — The Dispatches</h2>
-          <span className="ms-cap tnum text-[var(--mute)]">
+          <span className="ms-cap tnum text-(--mute)">
             {String(filteredFeedbacks.length).padStart(2, "0")} on file
           </span>
         </div>
-        <div className="border-t border-[var(--rule-strong)]" />
+        <div className="border-t border-(--rule-strong)" />
 
         {filteredFeedbacks.length === 0 ? (
           <div className="py-16 flex flex-col items-center gap-3 text-center">
