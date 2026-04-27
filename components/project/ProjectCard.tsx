@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { Code2, Globe, MessageSquare } from "lucide-react";
 import type { ProjectSummary } from "@/lib/projects";
 import { ContextStatusBadge } from "./ContextStatusBadge";
 
