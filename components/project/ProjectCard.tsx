@@ -23,30 +23,30 @@ function repoLabel(url: string): string {
   }
 }
 
-export function ProjectCard({ project }: { project: ProjectSummary }) {
+export function ProjectCard({ project, index }: { project: ProjectSummary; index?: number }) {
+  const num = typeof index === "number" ? String(index).padStart(2, "0") : "—";
   return (
     <Link
       href={`/project/${project.slug}`}
-      className="group flex flex-col gap-3 border border-border/60 bg-card p-4 transition-colors hover:border-primary/40 hover:bg-card/80"
+      className="group grid grid-cols-12 items-baseline gap-4 py-5 border-b border-[var(--rule)] transition-colors hover:bg-[rgba(0,0,0,0.03)]"
     >
-      <div className="flex items-start justify-between gap-2">
-        <div className="flex items-center gap-2 min-w-0">
-          <Globe className="size-4 text-muted-foreground shrink-0" />
-          <span className="text-sm font-medium truncate">{hostname(project.websiteUrl)}</span>
-        </div>
-        <ContextStatusBadge state={project.contextJobState} />
-      </div>
+      <div className="col-span-2 sm:col-span-1 ms-cap tnum text-[var(--mute)]">№ {num}</div>
 
-      <div className="flex items-center gap-2 text-xs text-muted-foreground min-w-0">
-        <Code2 className="size-3.5 shrink-0" />
-        <span className="truncate">{repoLabel(project.repoUrl)}</span>
-      </div>
-
-      <div className="mt-auto flex items-center gap-3 text-xs text-muted-foreground pt-2 border-t border-border/40">
-        <span className="inline-flex items-center gap-1">
-          <MessageSquare className="size-3.5" />
-          {project.feedbackCount} {project.feedbackCount === 1 ? "feedback" : "feedbacks"}
+      <div className="col-span-10 sm:col-span-8 flex flex-col gap-1 min-w-0">
+        <span
+          className="serif-display truncate"
+          style={{ fontSize: "22px", letterSpacing: "-0.015em", lineHeight: 1.15 }}
+        >
+          {hostname(project.websiteUrl)}
         </span>
+        <span className="ms-cap text-[var(--mute)] truncate">
+          {repoLabel(project.repoUrl)} &nbsp;·&nbsp; {project.feedbackCount} {project.feedbackCount === 1 ? "dispatch" : "dispatches"}
+        </span>
+      </div>
+
+      <div className="col-span-12 sm:col-span-3 flex items-center justify-end gap-3">
+        <ContextStatusBadge state={project.contextJobState} />
+        <span className="ms-cap text-[var(--ink)] transition-transform group-hover:translate-x-[2px]">→</span>
       </div>
     </Link>
   );
