@@ -1,59 +1,96 @@
-import { NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { generateText, Output } from "ai";
-import { createGoogleGenerativeAI } from "@ai-sdk/google";
-import { getFeedbacks } from "@/lib/storage";
 import { z } from "zod";
+import { getFeedbackLogsText, listFeedbacks } from "@/lib/feedbacks";
+import { searchModel } from "@/lib/gemini";
 
-export async function POST(req: Request) {
-    try {
-        // Resolve API key: user-supplied header takes precedence over env variable
-        const apiKey = req.headers.get("X-Api-Key") || process.env.GEMINI_AI_API_KEY;
-        if (!apiKey) {
-            return NextResponse.json({ error: "No Gemini API key provided. Please add your API key on the Feedbacks page." }, { status: 401 });
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
+const bodySchema = z.object({
+  projectSlug: z.string().min(1),
+  query: z.string().min(1),
+});
+
+const LOG_EXCERPT_BYTES = 2048;
+const SEARCH_CONCURRENCY = 5;
+
+async function pMap<T, R>(
+  items: T[],
+  concurrency: number,
+  fn: (item: T) => Promise<R>,
+): Promise<R[]> {
+  const results: R[] = new Array(items.length);
+  let cursor = 0;
+  const width = Math.max(1, Math.min(concurrency, items.length));
+  const workers: Promise<void>[] = [];
+  for (let w = 0; w < width; w++) {
+    workers.push(
+      (async () => {
+        while (true) {
+          const idx = cursor++;
+          if (idx >= items.length) return;
+          results[idx] = await fn(items[idx]!);
         }
-        const google = createGoogleGenerativeAI({ apiKey });
+      })(),
+    );
+  }
+  await Promise.all(workers);
+  return results;
+}
 
-        const { query } = await req.json();
+export async function POST(req: NextRequest): Promise<NextResponse> {
+  let parsed: z.infer<typeof bodySchema>;
+  try {
+    parsed = bodySchema.parse(await req.json());
+  } catch {
+    return NextResponse.json(
+      { error: "projectSlug and query are required" },
+      { status: 400 },
+    );
+  }
 
-        if (!query || typeof query !== 'string') {
-            return NextResponse.json({ error: "Query is required" }, { status: 400 });
-        }
+  const { projectSlug, query } = parsed;
 
-        const { feedbacks } = getFeedbacks();
-
-        // We only need to send the descriptions to Gemini
-        const searchData = Object.entries(feedbacks).map(([key, value]) => ({
-            key,
-            description: value.description
-        }));
-
-        if (searchData.length === 0) {
-            return NextResponse.json({ results: [] });
-        }
-
-        const { output } = await generateText({
-            model: google("gemini-3-flash-preview"),
-            output: Output.object({
-                schema: z.object({
-                    matchingKeys: z.array(z.string()).describe("The array of 'key' values (like 'issue-xyz1') from the provided JSON that are semantically relevant to the user's natural language search query.")
-                })
-            }),
-            prompt: `Given this user search query: "${query}"\n\nAnd this JSON list of feedbacks:\n${JSON.stringify(searchData, null, 2)}\n\nReturn the keys of the feedbacks that semantically match or are highly relevant to the search query. Return an empty array if none match.`
-        });
-
-        // Filter the original feedbacks based on the returned keys
-        const matchedFeedbacks = output.matchingKeys
-            .map(key => ({
-                key,
-                ...feedbacks[key]
-            }))
-            .filter(f => f.id)
-            .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-
-        return NextResponse.json({ results: matchedFeedbacks });
-
-    } catch (error) {
-        console.error("Error in natural language search:", error);
-        return NextResponse.json({ error: "Search failed" }, { status: 500 });
+  try {
+    const feedbacks = await listFeedbacks(projectSlug);
+    if (feedbacks.length === 0) {
+      return NextResponse.json({ matchingIds: [] });
     }
+
+    const items = await pMap(feedbacks, SEARCH_CONCURRENCY, async (f) => {
+      let logExcerpt = "";
+      try {
+        const text = await getFeedbackLogsText(projectSlug, f.id);
+        logExcerpt = text.slice(0, LOG_EXCERPT_BYTES);
+      } catch (err) {
+        console.warn(
+          `[api/feedback/search-v2] logs unreadable for ${f.id}`,
+          err,
+        );
+      }
+      return { id: f.id, description: f.description, logExcerpt };
+    });
+
+    const result = await generateText({
+      model: searchModel(),
+      experimental_output: Output.object({
+        schema: z.object({ matchingIds: z.array(z.string()) }),
+      }),
+      system:
+        "You are a search engine over user-submitted bug feedback. Given a free-text query and a list of feedback items (id, description, log excerpt), return the IDs of items relevant to the query. Match on intent, not keyword overlap. Return an empty array when nothing matches.",
+      prompt: JSON.stringify({ query, items }),
+    });
+
+    const known = new Set(feedbacks.map((f) => f.id));
+    const raw: unknown = result.experimental_output?.matchingIds;
+    const matchingIds = Array.isArray(raw)
+      ? (raw.filter((x) => typeof x === "string" && known.has(x)) as string[])
+      : [];
+
+    return NextResponse.json({ matchingIds });
+  } catch (err) {
+    console.error("[api/feedback/search-v2]", err);
+    return NextResponse.json({ error: "search failed" }, { status: 500 });
+  }
 }
