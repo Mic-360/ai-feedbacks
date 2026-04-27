@@ -78,7 +78,7 @@ export function Composer({
           className='flex-1 min-h-12 max-h-32 border-0! border-b! border-(--rule)! focus:border-(--ink)! bg-transparent! px-0! serif-body italic'
         />
         <Button
-          variant='editorial'
+          variant='default'
           onClick={send}
           disabled={sending || !value.trim()}
           className='h-9 px-4'

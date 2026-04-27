@@ -47,13 +47,14 @@ const markdownComponents: Components = {
   code(props) {
     const { className, children, ...rest } = omitMarkdownNode(props);
     const hasLanguage = /language-\w+/.test(className ?? '');
+    const isBlockCode = hasLanguage || String(children).includes('\n');
 
     return (
       <code
         {...rest}
         className={[
           'font-mono text-[0.92em]',
-          hasLanguage
+          isBlockCode
             ? 'block min-w-max whitespace-pre p-0'
             : 'border border-(--rule) bg-(--paper) px-1 py-0.5',
           className,
