@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { MessageCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { ChatModal } from "./ChatModal";
 
 export function ChatLauncher() {
