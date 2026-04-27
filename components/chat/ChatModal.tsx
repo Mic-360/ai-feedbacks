@@ -172,12 +172,12 @@ export function ChatModal({
             />
             <div className="flex-1 flex flex-col overflow-hidden">
               {!activeThreadId ? (
-                <div className="flex-1 flex items-center justify-center text-xs text-muted-foreground">
-                  Select or create a thread.
+                <div className="flex-1 flex items-center justify-center ms-cap text-[var(--mute)]">
+                  Select or open a new correspondence.
                 </div>
               ) : !thread ? (
-                <div className="flex-1 flex items-center justify-center text-xs text-muted-foreground">
-                  <Loader2 className="size-4 animate-spin mr-2" /> Loading…
+                <div className="flex-1 flex items-center justify-center ms-cap text-[var(--mute)]">
+                  <Loader2 className="size-4 animate-spin mr-2" /> Setting Type…
                 </div>
               ) : (
                 <>
