@@ -118,28 +118,39 @@ export function NewProjectForm() {
               onChange={(e) => field.handleChange(e.target.value)}
               placeholder="https://github.com/owner/repo"
               aria-invalid={field.state.meta.errors.length > 0}
+              className={inputCls}
             />
-            <FieldError errors={field.state.meta.errors.map((e: unknown) => ({ message: typeof e === "string" ? e : (e as { message?: string } | undefined)?.message }))} />
-          </Field>
+            {field.state.meta.errors.length > 0 && (
+              <p className="text-[11px] italic serif-body marker mt-1">
+                {typeof field.state.meta.errors[0] === "string"
+                  ? field.state.meta.errors[0]
+                  : (field.state.meta.errors[0] as { message?: string } | undefined)?.message}
+              </p>
+            )}
+          </div>
         )}
       </form.Field>
 
       {submitError && (
-        <p className="text-xs text-destructive" role="alert">
+        <p className="text-[11px] italic serif-body marker" role="alert">
           {submitError}
         </p>
       )}
 
       <form.Subscribe selector={(s) => [s.canSubmit, s.isSubmitting]}>
         {([canSubmit, isSubmitting]) => (
-          <Button
-            type="submit"
-            disabled={!canSubmit || isSubmitting}
-            className="w-full sm:w-auto"
-          >
-            {isSubmitting ? <Loader2 className="animate-spin" /> : null}
-            {isSubmitting ? "Creating…" : "Create project"}
-          </Button>
+          <div className="pt-2">
+            <Button
+              type="submit"
+              variant={canSubmit && !isSubmitting ? "editorial" : "editorial-ghost"}
+              size="lg"
+              disabled={!canSubmit || isSubmitting}
+              className="px-5 h-10"
+            >
+              {isSubmitting ? <Loader2 className="animate-spin size-3" /> : null}
+              {isSubmitting ? "Filing…" : "File for Review →"}
+            </Button>
+          </div>
         )}
       </form.Subscribe>
     </form>
