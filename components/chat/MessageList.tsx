@@ -1,7 +1,19 @@
 "use client";
 
 import type { ChatMessage } from "@/lib/chat";
-import { cn } from "@/lib/utils";
+
+function shortStamp(iso?: string): string {
+  if (!iso) return "";
+  try {
+    const d = new Date(iso);
+    const month = d.toLocaleString("en-US", { month: "short" }).toUpperCase();
+    const h = String(d.getHours()).padStart(2, "0");
+    const m = String(d.getMinutes()).padStart(2, "0");
+    return `${String(d.getDate()).padStart(2, "0")} ${month} · ${h}:${m}`;
+  } catch {
+    return "";
+  }
+}
 
 export function MessageList({
   messages,
