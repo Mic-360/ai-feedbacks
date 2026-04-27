@@ -4,6 +4,7 @@ import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { ThemeProvider } from "@/components/theme-provider";
+import { ChatLauncher } from "@/components/chat/ChatLauncher";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -101,6 +102,7 @@ export default function RootLayout({
             {children}
           </main>
           <Footer />
+          <ChatLauncher />
         </ThemeProvider>
       </body>
     </html>
