@@ -59,29 +59,41 @@ export function ContextJobProgress({
 
   if (job.state === "failed") {
     return (
-      <div className="border border-destructive/40 bg-destructive/5 p-3 text-xs">
-        <p className="font-medium text-destructive">Context generation failed</p>
-        {job.error && <p className="mt-1 text-muted-foreground">{job.error}</p>}
+      <div className="border border-[var(--marker)] p-4 text-xs">
+        <p className="eyebrow marker mb-1">Indexing Filed for Failure</p>
+        {job.error && <p className="serif-body text-[var(--ink-soft)] mt-1">{job.error}</p>}
       </div>
     );
   }
 
-  const pct = Math.max(2, Math.min(100, Math.round(job.progress * 100)));
-  const stage = job.stage ? stageLabels[job.stage] : "Queued";
+  const activeIdx = job.stage ? stageOrder.indexOf(job.stage) : -1;
+  const stageNum = activeIdx >= 0 ? activeIdx + 1 : 1;
+  const stageText = job.stage ? stageLabels[job.stage] : "Queued for indexing";
 
   return (
-    <div className="border border-border/60 bg-card p-3 text-xs">
-      <div className="flex items-center gap-2 mb-2">
-        <Loader2 className="size-3.5 animate-spin text-primary" />
-        <span className="font-medium">{stage}</span>
-        <span className="ml-auto text-muted-foreground">{pct}%</span>
+    <div className="border border-[var(--rule)] p-4 flex flex-col gap-3">
+      <div className="eyebrow tnum">
+        Indexing in Progress — Stage {String(stageNum).padStart(2, "0")} of 04
       </div>
-      <div className="h-1.5 w-full bg-muted overflow-hidden">
-        <div
-          className="h-full bg-primary transition-all"
-          style={{ width: `${pct}%` }}
-        />
+      <div className="grid grid-cols-4 border border-[var(--rule)]">
+        {stageOrder.map((s, i) => {
+          const active = i === activeIdx;
+          const done = i < activeIdx;
+          return (
+            <div
+              key={s}
+              className={`px-2 py-2 text-center ms-cap tnum ${i > 0 ? "border-l border-[var(--rule)]" : ""}`}
+              style={{
+                background: active ? "var(--ink)" : done ? "var(--secondary)" : "transparent",
+                color: active ? "var(--paper)" : done ? "var(--ink)" : "var(--mute)",
+              }}
+            >
+              0{i + 1}
+            </div>
+          );
+        })}
       </div>
+      <p className="serif-body italic text-[var(--ink-soft)] text-sm">{stageText}…</p>
     </div>
   );
 }
