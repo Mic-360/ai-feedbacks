@@ -16,8 +16,8 @@ export function LogsViewer({ text }: { text: string }) {
 
   if (!parsed) {
     return (
-      <div className="border border-border/60 bg-muted/30 p-3 text-xs text-muted-foreground">
-        Could not parse logs.
+      <div className="border border-[var(--rule)] p-3 ms-cap text-[var(--mute)]">
+        (logs unparseable)
       </div>
     );
   }
@@ -29,46 +29,59 @@ export function LogsViewer({ text }: { text: string }) {
         .join("\n")
     : "(none)";
 
+  const triggerCls =
+    "px-3 py-1.5 ms-cap border border-[var(--rule)] data-[state=active]:bg-[var(--ink)] data-[state=active]:text-[var(--paper)] data-[state=active]:border-[var(--ink)] hover:border-[var(--rule-strong)] -ml-px first:ml-0 transition-colors";
+  const paneCls =
+    "border border-[var(--rule)] bg-[var(--secondary)]";
+  const preCls =
+    "p-3 text-[11px] whitespace-pre-wrap break-all";
+
+  const monoFont = { fontFamily: "var(--font-mono), ui-monospace, monospace" } as React.CSSProperties;
+
   return (
-    <Tabs defaultValue="console" className="w-full">
-      <TabsList variant="line">
-        <TabsTrigger value="console">Console ({logs.console.length})</TabsTrigger>
-        <TabsTrigger value="rejections">
-          Rejections ({logs.unhandledRejections.length})
+    <Tabs defaultValue="console" className="w-full flex flex-col gap-2">
+      <TabsList variant="line" className="!gap-0 !border-0 flex flex-wrap">
+        <TabsTrigger value="console" className={triggerCls}>
+          I. Console ({logs.console.length})
         </TabsTrigger>
-        <TabsTrigger value="dom">DOM</TabsTrigger>
-        <TabsTrigger value="network">
-          Network ({logs.networkSummary?.length ?? 0})
+        <TabsTrigger value="rejections" className={triggerCls}>
+          II. Rejections ({logs.unhandledRejections.length})
+        </TabsTrigger>
+        <TabsTrigger value="dom" className={triggerCls}>
+          III. DOM
+        </TabsTrigger>
+        <TabsTrigger value="network" className={triggerCls}>
+          IV. Network ({logs.networkSummary?.length ?? 0})
         </TabsTrigger>
       </TabsList>
 
       <TabsContent value="console">
-        <ScrollArea className="h-64 border border-border/40 bg-muted/30">
-          <pre className="p-2 text-[11px] whitespace-pre-wrap break-all">
+        <ScrollArea className={`h-64 ${paneCls}`}>
+          <pre className={preCls} style={monoFont}>
             {logs.console.length ? logs.console.join("\n") : "(none)"}
           </pre>
         </ScrollArea>
       </TabsContent>
 
       <TabsContent value="rejections">
-        <ScrollArea className="h-64 border border-border/40 bg-muted/30">
-          <pre className="p-2 text-[11px] whitespace-pre-wrap break-all">
+        <ScrollArea className={`h-64 ${paneCls}`}>
+          <pre className={preCls} style={monoFont}>
             {logs.unhandledRejections.length ? logs.unhandledRejections.join("\n") : "(none)"}
           </pre>
         </ScrollArea>
       </TabsContent>
 
       <TabsContent value="dom">
-        <ScrollArea className="h-64 border border-border/40 bg-muted/30">
-          <pre className="p-2 text-[11px] whitespace-pre-wrap break-all">
+        <ScrollArea className={`h-64 ${paneCls}`}>
+          <pre className={preCls} style={monoFont}>
             {`length: ${logs.domLength}\n\n${logs.domExcerpt}`}
           </pre>
         </ScrollArea>
       </TabsContent>
 
       <TabsContent value="network">
-        <ScrollArea className="h-64 border border-border/40 bg-muted/30">
-          <pre className="p-2 text-[11px] whitespace-pre-wrap break-all">
+        <ScrollArea className={`h-64 ${paneCls}`}>
+          <pre className={preCls} style={monoFont}>
             {networkText}
           </pre>
         </ScrollArea>
