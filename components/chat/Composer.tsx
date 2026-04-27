@@ -62,9 +62,9 @@ export function Composer({
   }
 
   return (
-    <div className="flex flex-col gap-1 border-t border-border/40 p-2">
-      {error && <p className="text-xs text-destructive">{error}</p>}
-      <div className="flex gap-2 items-end">
+    <div className="flex flex-col gap-2 border-t border-[var(--rule)] p-4 bg-[var(--paper)]">
+      {error && <p className="text-[11px] italic serif-body marker">{error}</p>}
+      <div className="flex gap-3 items-end">
         <Textarea
           value={value}
           onChange={(e) => setValue(e.target.value)}
@@ -74,15 +74,17 @@ export function Composer({
               send();
             }
           }}
-          placeholder="Ask anything about the codebase…"
-          className="flex-1 min-h-12 max-h-32"
+          placeholder="Address the wire…"
+          className="flex-1 min-h-12 max-h-32 !border-0 !border-b !border-[var(--rule)] !rounded-none focus:!border-[var(--ink)] !bg-transparent !px-0 serif-body italic"
         />
         <Button
+          variant="editorial"
           onClick={send}
           disabled={sending || !value.trim()}
-          size="icon"
+          className="h-9 px-4"
         >
-          {sending ? <Loader2 className="animate-spin" /> : <Send />}
+          {sending ? <Loader2 className="animate-spin size-3" /> : null}
+          Send →
         </Button>
       </div>
     </div>
