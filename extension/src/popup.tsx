@@ -6,6 +6,14 @@ import {
   getSiteBaseUrl,
   setSiteBaseUrlOverride,
 } from './site-base';
+import {
+  getStoredThemePreference,
+  resolveTheme,
+  setStoredThemePreference,
+  THEME_PREFERENCES,
+  themeLabels,
+  type ThemePreference,
+} from './theme';
 
 type VerifyResponse = { match: boolean; slug?: string };
 
@@ -20,9 +28,15 @@ function App() {
   const [status, setStatus] = useState<string>('');
   const [errorMsg, setErrorMsg] = useState<string>('');
   const [busy, setBusy] = useState<boolean>(false);
+  const [themePreference, setThemePreference] =
+    useState<ThemePreference>('system');
 
   useEffect(() => {
     (async () => {
+      try {
+        const preference = await getStoredThemePreference();
+        setThemePreference(preference);
+      } catch (_e) {}
       try {
         const base = await getSiteBaseUrl();
         setSiteBaseUrl(base);
@@ -41,6 +55,37 @@ function App() {
       } catch (_e) {}
     })();
   }, []);
+
+  useEffect(() => {
+    const applyTheme = () => {
+      const resolved = resolveTheme(themePreference);
+      document.documentElement.dataset.theme = resolved;
+      document.documentElement.style.colorScheme = resolved;
+    };
+
+    applyTheme();
+
+    if (
+      themePreference !== 'system' ||
+      typeof window.matchMedia !== 'function'
+    ) {
+      return;
+    }
+
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    mediaQuery.addEventListener('change', applyTheme);
+
+    return () => mediaQuery.removeEventListener('change', applyTheme);
+  }, [themePreference]);
+
+  const changeThemePreference = async (preference: ThemePreference) => {
+    setThemePreference(preference);
+    try {
+      await setStoredThemePreference(preference);
+    } catch (_e) {
+      setErrorMsg('Unable to save theme preference.');
+    }
+  };
 
   const saveBase = async () => {
     const trimmed = baseDraft.trim();
