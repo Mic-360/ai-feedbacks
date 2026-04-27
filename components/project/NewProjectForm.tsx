@@ -55,15 +55,8 @@ export function NewProjectForm() {
         e.stopPropagation();
         form.handleSubmit();
       }}
-      className="flex flex-col gap-4 w-full max-w-xl border border-border/60 bg-card p-5"
+      className="flex flex-col gap-6 w-full"
     >
-      <div className="flex flex-col gap-1">
-        <h2 className="text-sm font-semibold">Register a project</h2>
-        <p className="text-xs text-muted-foreground">
-          Add the website URL you want to capture feedback from and the public GitHub repo it belongs to.
-        </p>
-      </div>
-
       <form.Field
         name="websiteUrl"
         validators={{
