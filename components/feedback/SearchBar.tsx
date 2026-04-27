@@ -64,7 +64,7 @@ export function SearchBar({
         </div>
         <Button
           type="submit"
-          variant="editorial"
+          variant="default"
           disabled={pending || !query.trim()}
           className="h-9 px-4"
         >
@@ -74,7 +74,7 @@ export function SearchBar({
         {(query || pending) && (
           <Button
             type="button"
-            variant="editorial-ghost"
+            variant="ghost"
             onClick={clear}
             className="h-9 px-3"
             style={{ fontStyle: "italic", textTransform: "none", letterSpacing: 0, fontFamily: "var(--font-body)" }}

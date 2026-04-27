@@ -1,6 +1,7 @@
 'use client';
 
 import type { Feedback } from '@/lib/feedbacks';
+import Image from 'next/image';
 
 function excerpt(s: string, n = 200): string {
   if (s.length <= n) return s;
@@ -35,7 +36,7 @@ export function FeedbackCard({
     <button
       type='button'
       onClick={onClick}
-      className='group grid grid-cols-12 items-start gap-4 sm:gap-6 py-6 text-left border-b border-(--rule) transition-colors hover:bg-(--hover-tint) w-full'
+      className='group grid grid-cols-12 items-start gap-4 sm:gap-6 py-6 text-left border-b border-(--rule) transition-colors hover:bg-(--hover-tint) w-full px-2'
     >
       {/* Left rail */}
       <div className='col-span-12 sm:col-span-2 flex flex-col gap-1 ms-cap text-(--mute)'>
@@ -46,7 +47,7 @@ export function FeedbackCard({
             fixCount > 0 ? 'text-(--accent-sage)' : 'text-(--mute)'
           }
         >
-          {fixCount > 0 ? `Verdict v${fixCount}` : 'No verdict'}
+          {fixCount > 0 ? `Task v${fixCount}` : 'No task'}
         </span>
       </div>
 
@@ -58,19 +59,21 @@ export function FeedbackCard({
         >
           {excerpt(feedback.description)}
         </p>
-        <span className='ms-cap text-(--ink) transition-transform group-hover:translate-x-[2px]'>
-          Read Dispatch →
+        <span className='ms-cap text-(--ink) transition-transform group-hover:translate-x-0.5 border p-2 w-fit'>
+          Read Report →
         </span>
       </div>
 
       {/* Right — thumbnail */}
       <div className='col-span-12 sm:col-span-3'>
-        <div className='border border-(--rule) aspect-4/3 overflow-hidden bg-(--secondary)'>
-          <img
+        <div className='border border-(--rule) aspect-4/3 overflow-hidden bg-secondary'>
+          <Image
             src={`/api/image/${feedback.imageKey}`}
-            alt='Dispatch screenshot'
-            className='size-full object-cover'
+            alt='Feedback screenshot'
+            className='size-full object-contain'
             loading='lazy'
+            height={200}
+            width={200}
           />
         </div>
       </div>

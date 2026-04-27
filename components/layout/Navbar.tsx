@@ -36,10 +36,10 @@ export function Navbar() {
                 fontVariationSettings: '"SOFT" 30',
               }}
             >
-              AI Feedbacks Dispatch
+              AI Feedbacks Console
             </span>
             <span className="ms-cap mt-1 text-(--mute)" style={{ letterSpacing: "0.18em" }}>
-              The Bug·Report Gazette — Est. 2026
+              Automated Feedback Processing — Est. 2026
             </span>
           </Link>
 

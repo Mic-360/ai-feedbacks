@@ -131,27 +131,27 @@ export function ChatModal({
     >
       <DialogContent className='max-w-4xl! w-full h-[80vh] sm:max-w-4xl! flex flex-col p-0 gap-0 bg-(--paper) text-(--ink) border border-(--rule-strong)'>
         <DialogHeader className='p-5 border-b border-(--rule)'>
-          <div className='eyebrow-mute mb-1'>№ III — The Correspondence</div>
+          <div className='eyebrow-mute mb-1'>AI Chat</div>
           <DialogTitle
             className='serif-display text-[26px]!'
             style={{ letterSpacing: '-0.02em', lineHeight: 1, fontWeight: 500 }}
           >
-            The Correspondence
+            Chat
           </DialogTitle>
           <div className='mt-3'>
-            <label className='eyebrow-mute block mb-1'>Publication</label>
+            <label className='eyebrow-mute block mb-1'>Project</label>
             <Combobox
               items={projects.map((p) => p.slug)}
               value={slug ?? ''}
               onValueChange={(v) => typeof v === 'string' && setSlug(v)}
             >
               <ComboboxInput
-                placeholder='Select a publication…'
+                placeholder='Select a project…'
                 className='border-0! border-b! border-(--rule)! focus:border-(--ink)! bg-transparent! px-0!'
               />
               <ComboboxContent>
                 <ComboboxList>
-                  <ComboboxEmpty>No publications.</ComboboxEmpty>
+                  <ComboboxEmpty>No projects.</ComboboxEmpty>
                   {projects.map((p) => (
                     <ComboboxItem
                       key={p.slug}
@@ -168,7 +168,7 @@ export function ChatModal({
 
         {!slug ? (
           <div className='flex-1 flex items-center justify-center ms-cap text-(--mute)'>
-            Choose a publication to begin correspondence.
+            Choose a project to begin chat.
           </div>
         ) : (
           <div className='flex-1 flex overflow-hidden'>
@@ -182,7 +182,7 @@ export function ChatModal({
             <div className='flex-1 flex flex-col overflow-hidden'>
               {!activeThreadId ? (
                 <div className='flex-1 flex items-center justify-center ms-cap text-(--mute)'>
-                  Select or open a new correspondence.
+                  Select or open a new chat.
                 </div>
               ) : !thread ? (
                 <div className='flex-1 flex items-center justify-center ms-cap text-(--mute)'>

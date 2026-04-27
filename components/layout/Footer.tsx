@@ -12,7 +12,7 @@ export function Footer() {
       <div className="double-rule" />
       <div className="container mx-auto px-4 py-6">
         <div className="ms-cap tnum text-(--mute) text-center leading-relaxed">
-          Set in Fraunces, Newsreader, Mona Sans, and JetBrains Mono.
+          Made by bhaumic_
           <br className="sm:hidden" />
           <span className="hidden sm:inline"> &nbsp;·&nbsp; </span>
           Compiled at {compiled}.

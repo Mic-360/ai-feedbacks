@@ -100,20 +100,20 @@ export function FixPromptPanel({
     <div className='flex flex-col gap-3 h-full'>
       <div className='flex items-center gap-2 flex-wrap'>
         <Button
-          variant='editorial'
+          variant='default'
           onClick={generate}
           disabled={!contextReady || isStreaming}
           className='h-9 px-4'
         >
           {isStreaming ? <Loader2 className='animate-spin size-3' /> : null}
           {isStreaming
-            ? 'Drafting Verdict…'
+            ? 'Drafting Task…'
             : versions.length
-              ? 'Redraft Verdict →'
+              ? 'Redraft Task →'
               : 'Generate Fix →'}
         </Button>
         <Button
-          variant='editorial-ghost'
+          variant='ghost'
           onClick={copy}
           disabled={!current}
           className='h-9 px-4'
@@ -126,7 +126,7 @@ export function FixPromptPanel({
             <DropdownMenuTrigger
               render={
                 <Button
-                  variant='editorial-ghost'
+                  variant='ghost'
                   className='ml-auto h-9 px-3'
                 >
                   v{selectedV ?? versions[0]!.v}{' '}
@@ -150,7 +150,7 @@ export function FixPromptPanel({
 
       {!contextReady && (
         <p className='ms-cap text-(--mute) border border-(--rule) p-3'>
-          House style still being composed. Drafting will resume once it is
+          Project context is still being generated. Drafting will resume once it is
           ready.
         </p>
       )}
@@ -180,7 +180,7 @@ export function FixPromptPanel({
           {current ||
             (isStreaming
               ? '…'
-              : 'No verdict on file. Press Generate Fix to draft one.')}
+              : 'No task on file. Press Generate Fix to draft one.')}
         </pre>
       </div>
     </div>

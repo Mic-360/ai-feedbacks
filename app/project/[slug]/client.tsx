@@ -9,7 +9,7 @@ import { ContextJobProgress } from "@/components/project/ContextJobProgress";
 import { FeedbackCard } from "@/components/feedback/FeedbackCard";
 import { FeedbackDetailSheet } from "@/components/feedback/FeedbackDetailSheet";
 import { SearchBar } from "@/components/feedback/SearchBar";
-import { ChatModal } from "@/components/chat/ChatModal";
+// import { ChatModal } from "@/components/chat/ChatModal";
 import type { ContextJob, Project } from "@/lib/projects";
 import type { Feedback } from "@/lib/feedbacks";
 
@@ -44,7 +44,6 @@ export function ProjectClient({
   const [job, setJob] = useState<ContextJob | null>(initialJob);
   const [matchingIds, setMatchingIds] = useState<string[] | null>(null);
   const [openFeedbackId, setOpenFeedbackId] = useState<string | null>(null);
-  const [chatOpen, setChatOpen] = useState(false);
   const [regenerating, setRegenerating] = useState(false);
 
   const contextReady = job?.state === "done" || project.contextGeneratedAt !== null;
@@ -75,7 +74,7 @@ export function ProjectClient({
     <div className="container mx-auto w-full px-4 py-10 flex flex-col gap-10">
       {/* Masthead-style header */}
       <header className="flex flex-col gap-6">
-        <div className="eyebrow-mute">№ {project.slug.slice(0, 4).toUpperCase()} — The Publication</div>
+        <div className="eyebrow-mute">Project: {project.slug.toUpperCase()}</div>
         <h1
           className="serif-display"
           style={{
@@ -118,7 +117,7 @@ export function ProjectClient({
               </a>
             </div>
             <div className="flex items-center gap-2">
-              <span className="ms-cap text-(--mute)">House Style &nbsp;·&nbsp;</span>
+              <span className="ms-cap text-(--mute)">Project Context &nbsp;·&nbsp;</span>
               <ContextStatusBadge state={job?.state ?? "none"} />
             </div>
           </div>
@@ -126,16 +125,13 @@ export function ProjectClient({
 
         <div className="flex flex-wrap items-center justify-end gap-3 pt-2">
           <Button
-            variant="editorial-ghost"
+            variant="outline"
             onClick={regenerate}
             disabled={regenerating || job?.state === "running" || job?.state === "queued"}
             className="h-9 px-4"
           >
             {regenerating ? <Loader2 className="animate-spin size-3" /> : null}
             Regenerate Context →
-          </Button>
-          <Button variant="editorial" onClick={() => setChatOpen(true)} className="h-9 px-4">
-            Open Correspondence →
           </Button>
         </div>
 
@@ -158,10 +154,10 @@ export function ProjectClient({
 
       <hr className="border-t border-(--rule)" />
 
-      {/* Dispatches */}
+      {/* Feedback Reports */}
       <section className="flex flex-col gap-4">
         <div className="flex items-baseline justify-between">
-          <h2 className="eyebrow">№ 02 — The Dispatches</h2>
+          <h2 className="eyebrow">Feedback Reports</h2>
           <span className="ms-cap tnum text-(--mute)">
             {String(filteredFeedbacks.length).padStart(2, "0")} on file
           </span>
@@ -174,8 +170,8 @@ export function ProjectClient({
               <span className="marker text-2xl serif-display">§</span>
               <p className="serif-display italic" style={{ fontSize: "20px" }}>
                 {initialFeedbacks.length === 0
-                  ? "“No dispatches yet. The wire is quiet.”"
-                  : "“No dispatches match the present query.”"}
+                  ? "“No feedback reports yet.”"
+                  : "“No feedback reports match the present query.”"}
               </p>
               <span className="marker text-2xl serif-display">§</span>
             </div>
@@ -200,12 +196,6 @@ export function ProjectClient({
         projectSlug={project.slug}
         feedbackId={openFeedbackId}
         contextReady={contextReady}
-      />
-
-      <ChatModal
-        open={chatOpen}
-        onOpenChange={setChatOpen}
-        initialProjectSlug={project.slug}
       />
     </div>
   );

@@ -21,7 +21,7 @@ export default async function Home() {
       <section className="flex flex-col gap-6">
         <div className="eyebrow-mute tnum">№ 01 — The Proposition</div>
         <div className="dropcap-block serif-body" style={{ fontSize: "22px", lineHeight: 1.5, textAlign: "justify", maxWidth: "62ch" }}>
-          A private editorial gazette of incoming bug-reports. File a publication, equip its house style, and the wire begins to hum — dispatches captured by your extension arrive here as field notes, then drafted into verdicts a coding agent can act on without ceremony.
+          A centralized command center for incoming feedback and bug reports. Register a project, and the pipeline activates—raw user feedback captured from your apps arrives here, which is then processed by AI into structured, actionable tasks ready for coding agents.
         </div>
         <div className="border-t border-(--rule)" />
       </section>
@@ -29,9 +29,9 @@ export default async function Home() {
       {/* 5/7 split — File a new title + Table of contents */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-10">
         <div className="lg:col-span-5 flex flex-col gap-4">
-          <div className="eyebrow">File a New Title</div>
-          <p className="serif-body italic text-(--mute)" style={{ fontSize: "15px", lineHeight: 1.5 }}>
-            Register a publication and we will compose its house style.
+          <div className="text-4xl">Register a New Project</div>
+          <p className="serif-body italic dark:text-primary-foreground text-primary" style={{ fontSize: "15px", lineHeight: 1.5 }}>
+            Add a project to begin receiving and processing user feedback.
           </p>
           <div className="border-t border-(--rule) pt-5">
             <NewProjectForm />
@@ -40,7 +40,7 @@ export default async function Home() {
 
         <div className="lg:col-span-7 flex flex-col gap-3">
           <div className="flex items-baseline justify-between">
-            <h2 className="eyebrow">The Table of Contents</h2>
+            <h2 className="text-2xl">Active Projects</h2>
             <span className="ms-cap tnum text-(--mute)">{String(projects.length).padStart(2, "0")} on file</span>
           </div>
           <div className="border-t border-(--rule-strong)" />
@@ -55,13 +55,13 @@ export default async function Home() {
               <div className="flex items-center gap-3">
                 <span className="marker text-2xl serif-display">§</span>
                 <p className="serif-display italic" style={{ fontSize: "22px" }}>
-                  &ldquo;No publications on file. Begin with a title above.&rdquo;
+                  &ldquo;No projects on file. Begin by registering a new project above.&rdquo;
                 </p>
                 <span className="marker text-2xl serif-display">§</span>
               </div>
             </div>
           ) : (
-            <div className="flex flex-col">
+            <div className="flex flex-col h-96 overflow-y-auto">
               {projects.map((p, idx) => (
                 <ProjectCard key={p.slug} project={p} index={idx + 1} />
               ))}

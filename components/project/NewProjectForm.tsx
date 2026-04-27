@@ -142,7 +142,7 @@ export function NewProjectForm() {
           <div className="pt-2">
             <Button
               type="submit"
-              variant={canSubmit && !isSubmitting ? "editorial" : "editorial-ghost"}
+              variant={canSubmit && !isSubmitting ? "default" : "outline"}
               size="lg"
               disabled={!canSubmit || isSubmitting}
               className="px-5 h-10"

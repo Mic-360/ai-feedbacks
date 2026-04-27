@@ -36,10 +36,10 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://ai-feedbacks.exampl
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "AI Feedbacks Dispatch | The Bug-Report Gazette",
-    template: "%s | AI Feedbacks Dispatch",
+    default: "AI Feedbacks | Automated Bug-Report Processing",
+    template: "%s | AI Feedbacks",
   },
-  description: "A private editorial gazette of incoming bug-reports. File your publications and let the verdicts roll in.",
+  description: "A centralized command center for incoming feedback. Process user reports into actionable AI tasks.",
   keywords: ["AI", "Feedback", "Debugging", "Gemini", "Coding Agent", "Developer Tools", "Prompt Engineering"],
   authors: [{ name: "bhaumic", url: siteUrl }],
   creator: "bhaumic",
@@ -47,22 +47,22 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: siteUrl,
-    title: "AI Feedbacks Dispatch | The Bug-Report Gazette",
-    description: "A private editorial gazette of incoming bug-reports.",
-    siteName: "AI Feedbacks Dispatch",
+    title: "AI Feedbacks | Automated Bug-Report Processing",
+    description: "A centralized command center for incoming feedback.",
+    siteName: "AI Feedbacks",
     images: [
       {
         url: "/image.png",
         width: 1200,
         height: 630,
-        alt: "AI Feedbacks Dispatch OG Image",
+        alt: "AI Feedbacks OG Image",
       }
     ]
   },
   twitter: {
     card: "summary_large_image",
-    title: "AI Feedbacks Dispatch | The Bug-Report Gazette",
-    description: "A private editorial gazette of incoming bug-reports.",
+    title: "AI Feedbacks | Automated Bug-Report Processing",
+    description: "A centralized command center for incoming feedback.",
     creator: "@bhaumic",
     images: ["/image.png"],
   },
@@ -97,8 +97,8 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "WebApplication",
-              "name": "AI Feedbacks Dispatch",
-              "description": "A private editorial gazette of incoming bug-reports.",
+              "name": "AI Feedbacks",
+              "description": "A centralized command center for incoming feedback.",
               "url": siteUrl,
               "applicationCategory": "DeveloperApplication",
               "operatingSystem": "All",
