@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { cn } from "@/lib/utils";
-import { Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+import { Loader2 } from 'lucide-react';
 
 export interface ThreadStub {
   threadId: string;
@@ -23,38 +23,51 @@ export function ThreadList({
   loading?: boolean;
 }) {
   return (
-    <div className="flex flex-col border-r border-[var(--rule)] w-56 overflow-y-auto shrink-0">
-      <div className="p-3 border-b border-[var(--rule)]">
+    <div className='flex flex-col border-r border-[var(--rule)] w-56 overflow-y-auto shrink-0'>
+      <div className='p-3 border-b border-[var(--rule)]'>
         <Button
-          variant="editorial-ghost"
-          size="sm"
+          variant='editorial-ghost'
+          size='sm'
           onClick={onNewThread}
           disabled={loading}
-          className="w-full h-9"
+          className='w-full h-9'
         >
-          {loading ? <Loader2 className="animate-spin size-3" /> : null} New Correspondence →
+          {loading ? <Loader2 className='animate-spin size-3' /> : null} New
+          Correspondence →
         </Button>
       </div>
-      <div className="flex flex-col">
+      <div className='flex flex-col'>
         {threads.length === 0 && (
-          <p className="ms-cap text-[var(--mute)] text-center mt-4 px-3 italic" style={{ fontFamily: "var(--font-body)", textTransform: "none", letterSpacing: 0 }}>
+          <p
+            className='ms-cap text-[var(--mute)] text-center mt-4 px-3 italic'
+            style={{
+              fontFamily: 'var(--font-body)',
+              textTransform: 'none',
+              letterSpacing: 0,
+            }}
+          >
             No correspondence yet.
           </p>
         )}
         {threads.map((t, i) => (
           <button
             key={t.threadId}
-            type="button"
+            type='button'
             onClick={() => onSelect(t.threadId)}
             className={cn(
-              "text-left px-3 py-3 truncate transition-colors border-b border-[var(--rule)] flex items-baseline gap-2",
+              'text-left px-3 py-3 truncate transition-colors border-b border-[var(--rule)] flex items-baseline gap-2',
               activeId === t.threadId
-                ? "bg-[var(--ink)] text-[var(--paper)]"
-                : "hover:bg-[rgba(0,0,0,0.03)] text-[var(--ink)]",
+                ? 'bg-[var(--ink)] text-[var(--paper)]'
+                : 'hover:bg-[var(--hover-tint)] text-[var(--ink)]',
             )}
           >
-            <span className="ms-cap tnum opacity-70 shrink-0">№ {String(i + 1).padStart(2, "0")}</span>
-            <span className="serif-body truncate" style={{ fontSize: "14px" }}>
+            <span className='ms-cap tnum opacity-70 shrink-0'>
+              № {String(i + 1).padStart(2, '0')}
+            </span>
+            <span
+              className='serif-body truncate'
+              style={{ fontSize: '14px' }}
+            >
               {t.threadId.slice(0, 12)}
             </span>
           </button>

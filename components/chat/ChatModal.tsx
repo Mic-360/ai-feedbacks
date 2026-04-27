@@ -1,26 +1,26 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
+import {
+  Combobox,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
+} from '@/components/ui/combobox';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { ThreadList, type ThreadStub } from "./ThreadList";
-import { MessageList } from "./MessageList";
-import { Composer } from "./Composer";
-import {
-  Combobox,
-  ComboboxInput,
-  ComboboxContent,
-  ComboboxList,
-  ComboboxItem,
-  ComboboxEmpty,
-} from "@/components/ui/combobox";
-import { Loader2 } from "lucide-react";
-import type { ProjectSummary } from "@/lib/projects";
-import type { ChatThread, ChatMessage } from "@/lib/chat";
+} from '@/components/ui/dialog';
+import type { ChatMessage, ChatThread } from '@/lib/chat';
+import type { ProjectSummary } from '@/lib/projects';
+import { Loader2 } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Composer } from './Composer';
+import { MessageList } from './MessageList';
+import { ThreadList, type ThreadStub } from './ThreadList';
 
 export function ChatModal({
   open,
@@ -43,7 +43,7 @@ export function ChatModal({
   // Load projects when open
   useEffect(() => {
     if (!open) return;
-    fetch("/api/project/list", { cache: "no-store" })
+    fetch('/api/project/list', { cache: 'no-store' })
       .then((r) => r.json())
       .then((d: { projects?: ProjectSummary[] }) => {
         setProjects(d.projects ?? []);
@@ -59,7 +59,7 @@ export function ChatModal({
     if (!open || !slug) return;
     setActiveThreadId(null);
     setThread(null);
-    fetch(`/api/project/${slug}`, { cache: "no-store" })
+    fetch(`/api/project/${slug}`, { cache: 'no-store' })
       .then((r) => r.json())
       .then((d: { project?: { chatThreadIds: string[] } }) => {
         const ids = d.project?.chatThreadIds ?? [];
@@ -76,7 +76,7 @@ export function ChatModal({
     setPendingAssistant(null);
     fetch(
       `/api/chat/thread/${activeThreadId}?projectSlug=${encodeURIComponent(slug)}`,
-      { cache: "no-store" },
+      { cache: 'no-store' },
     )
       .then((r) => r.json())
       .then((d: { thread?: ChatThread | null }) => {
@@ -89,9 +89,9 @@ export function ChatModal({
     if (!slug) return;
     setCreatingThread(true);
     try {
-      const res = await fetch("/api/chat/thread", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch('/api/chat/thread', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ projectSlug: slug }),
       });
       const d = (await res.json()) as { threadId?: string };
@@ -108,7 +108,7 @@ export function ChatModal({
     if (!slug || !activeThreadId) return;
     const res = await fetch(
       `/api/chat/thread/${activeThreadId}?projectSlug=${encodeURIComponent(slug)}`,
-      { cache: "no-store" },
+      { cache: 'no-store' },
     );
     const d = (await res.json()) as { thread?: ChatThread | null };
     if (d.thread) setThread(d.thread);
@@ -120,34 +120,43 @@ export function ChatModal({
   const allMessages: ChatMessage[] = pendingUser
     ? [
         ...messages,
-        { role: "user", content: pendingUser, ts: new Date().toISOString() },
+        { role: 'user', content: pendingUser, ts: new Date().toISOString() },
       ]
     : messages;
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="!max-w-4xl w-full h-[80vh] sm:!max-w-4xl flex flex-col p-0 gap-0 bg-[var(--paper)] text-[var(--ink)] border border-[var(--rule-strong)] !rounded-none">
-        <DialogHeader className="p-5 border-b border-[var(--rule)]">
-          <div className="eyebrow-mute mb-1">№ III — The Correspondence</div>
+    <Dialog
+      open={open}
+      onOpenChange={onOpenChange}
+    >
+      <DialogContent className='!max-w-4xl w-full h-[80vh] sm:!max-w-4xl flex flex-col p-0 gap-0 bg-[var(--paper)] text-[var(--ink)] border border-[var(--rule-strong)]'>
+        <DialogHeader className='p-5 border-b border-[var(--rule)]'>
+          <div className='eyebrow-mute mb-1'>№ III — The Correspondence</div>
           <DialogTitle
-            className="serif-display !text-[26px]"
-            style={{ letterSpacing: "-0.02em", lineHeight: 1, fontWeight: 500 }}
+            className='serif-display !text-[26px]'
+            style={{ letterSpacing: '-0.02em', lineHeight: 1, fontWeight: 500 }}
           >
             The Correspondence
           </DialogTitle>
-          <div className="mt-3">
-            <label className="eyebrow-mute block mb-1">Publication</label>
+          <div className='mt-3'>
+            <label className='eyebrow-mute block mb-1'>Publication</label>
             <Combobox
               items={projects.map((p) => p.slug)}
-              value={slug ?? ""}
-              onValueChange={(v) => typeof v === "string" && setSlug(v)}
+              value={slug ?? ''}
+              onValueChange={(v) => typeof v === 'string' && setSlug(v)}
             >
-              <ComboboxInput placeholder="Select a publication…" className="!border-0 !border-b !border-[var(--rule)] !rounded-none focus:!border-[var(--ink)] !bg-transparent !px-0" />
+              <ComboboxInput
+                placeholder='Select a publication…'
+                className='!border-0 !border-b !border-[var(--rule)] focus:!border-[var(--ink)] !bg-transparent !px-0'
+              />
               <ComboboxContent>
                 <ComboboxList>
                   <ComboboxEmpty>No publications.</ComboboxEmpty>
                   {projects.map((p) => (
-                    <ComboboxItem key={p.slug} value={p.slug}>
+                    <ComboboxItem
+                      key={p.slug}
+                      value={p.slug}
+                    >
                       {p.slug}
                     </ComboboxItem>
                   ))}
@@ -158,11 +167,11 @@ export function ChatModal({
         </DialogHeader>
 
         {!slug ? (
-          <div className="flex-1 flex items-center justify-center ms-cap text-[var(--mute)]">
+          <div className='flex-1 flex items-center justify-center ms-cap text-[var(--mute)]'>
             Choose a publication to begin correspondence.
           </div>
         ) : (
-          <div className="flex-1 flex overflow-hidden">
+          <div className='flex-1 flex overflow-hidden'>
             <ThreadList
               threads={threads}
               activeId={activeThreadId}
@@ -170,14 +179,14 @@ export function ChatModal({
               onNewThread={newThread}
               loading={creatingThread}
             />
-            <div className="flex-1 flex flex-col overflow-hidden">
+            <div className='flex-1 flex flex-col overflow-hidden'>
               {!activeThreadId ? (
-                <div className="flex-1 flex items-center justify-center ms-cap text-[var(--mute)]">
+                <div className='flex-1 flex items-center justify-center ms-cap text-[var(--mute)]'>
                   Select or open a new correspondence.
                 </div>
               ) : !thread ? (
-                <div className="flex-1 flex items-center justify-center ms-cap text-[var(--mute)]">
-                  <Loader2 className="size-4 animate-spin mr-2" /> Setting Type…
+                <div className='flex-1 flex items-center justify-center ms-cap text-[var(--mute)]'>
+                  <Loader2 className='size-4 animate-spin mr-2' /> Setting Type…
                 </div>
               ) : (
                 <>
@@ -190,7 +199,7 @@ export function ChatModal({
                     threadId={activeThreadId}
                     onPending={(t) => {
                       setPendingUser(t);
-                      setPendingAssistant("");
+                      setPendingAssistant('');
                     }}
                     onAssistantChunk={(t) => setPendingAssistant(t)}
                     onDone={refetchThread}
