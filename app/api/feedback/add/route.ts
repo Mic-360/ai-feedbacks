@@ -1,83 +1,98 @@
-import { NextResponse } from "next/server";
-import { streamText } from "ai";
-import { createGoogleGenerativeAI } from "@ai-sdk/google";
-import { saveImageLocally, saveFeedback } from "@/lib/storage";
+import { type NextRequest, NextResponse } from "next/server";
+import { createFeedback } from "@/lib/feedbacks";
+import { requireProject } from "@/lib/projects";
+import type { LogsPayload } from "@/lib/logs-txt";
 
-function generateRandomAlphanumeric(length: number) {
-    const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-    let result = '';
-    for (let i = 0; i < length; i++) {
-        result += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return result;
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
+const CORS_HEADERS = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, *",
+};
+
+export async function OPTIONS(): Promise<Response> {
+  return new Response(null, { status: 204, headers: CORS_HEADERS });
 }
 
-export async function POST(req: Request) {
-    try {
-        // Resolve API key: user-supplied header takes precedence over env variable
-        const apiKey = req.headers.get("X-Api-Key") || process.env.GEMINI_AI_API_KEY;
-        if (!apiKey) {
-            return NextResponse.json({ error: "No Gemini API key provided. Please add your API key on the Feedbacks page." }, { status: 401 });
-        }
-        const google = createGoogleGenerativeAI({ apiKey });
+export async function POST(req: NextRequest): Promise<NextResponse> {
+  let form: FormData;
+  try {
+    form = await req.formData();
+  } catch {
+    return NextResponse.json(
+      { error: "invalid multipart form" },
+      { status: 400, headers: CORS_HEADERS },
+    );
+  }
 
-        const formData = await req.formData();
-        const image = formData.get("image") as File;
-        const description = formData.get("description") as string;
+  const image = form.get("image");
+  const description = form.get("description");
+  const logsRaw = form.get("logs");
+  const projectSlug = form.get("projectSlug");
 
-        if (!image || !description) {
-            return NextResponse.json({ error: "Image and description are required" }, { status: 400 });
-        }
+  if (!(image instanceof File)) {
+    return NextResponse.json(
+      { error: "image file is required" },
+      { status: 400, headers: CORS_HEADERS },
+    );
+  }
+  if (typeof description !== "string" || description.length === 0) {
+    return NextResponse.json(
+      { error: "description is required" },
+      { status: 400, headers: CORS_HEADERS },
+    );
+  }
+  if (typeof logsRaw !== "string") {
+    return NextResponse.json(
+      { error: "logs is required" },
+      { status: 400, headers: CORS_HEADERS },
+    );
+  }
+  if (typeof projectSlug !== "string" || projectSlug.length === 0) {
+    return NextResponse.json(
+      { error: "projectSlug is required" },
+      { status: 400, headers: CORS_HEADERS },
+    );
+  }
 
-        // Generate IDs
-        const issueCode = generateRandomAlphanumeric(4);
-        const feedbackKey = `issue-${issueCode}`;
-        const id = generateRandomAlphanumeric(8);
+  let logs: LogsPayload;
+  try {
+    logs = JSON.parse(logsRaw) as LogsPayload;
+  } catch {
+    return NextResponse.json(
+      { error: "logs is not valid JSON" },
+      { status: 400, headers: CORS_HEADERS },
+    );
+  }
 
-        // Save image
-        const imagePath = await saveImageLocally(image, id);
+  try {
+    await requireProject(projectSlug);
+  } catch {
+    return NextResponse.json(
+      { error: "project not found" },
+      { status: 404, headers: CORS_HEADERS },
+    );
+  }
 
-        // Generate AI Prompt
-        const buffer = await image.arrayBuffer();
-        const ui8 = new Uint8Array(buffer);
-
-        const result = streamText({
-            model: google("gemini-3-flash-preview"),
-            messages: [
-                {
-                    role: "user",
-                    content: [
-                        {
-                            type: "text",
-                            text: `You are an expert AI architect. A user is reporting an issue with their application. Analyze the provided screenshot and the user's issue description: "${description}". Provide a short, precise, and highly concise ready-to-use prompt that can be copy-pasted into a coding agent to perfectly resolve the issue shown in the image and described by the user. Write only the prompt cleanly formatted in markdown without any fluff.`
-                        },
-                        { type: "image", image: ui8 }
-                    ]
-                }
-            ],
-            onFinish: async ({ text }) => {
-                const newFeedback = {
-                    id,
-                    image: imagePath,
-                    description,
-                    createdAt: new Date().toISOString(),
-                    prompt: text
-                };
-                saveFeedback(feedbackKey, newFeedback);
-            }
-        });
-
-        // Set headers so the client can immediately display correct optimistic data
-        return result.toTextStreamResponse({
-            headers: {
-                "X-Feedback-Id": id,
-                "X-Feedback-Key": feedbackKey,
-                "X-Image-Path": imagePath,
-            }
-        });
-
-    } catch (error) {
-        console.error("Error adding feedback:", error);
-        return NextResponse.json({ error: "Failed to process feedback" }, { status: 500 });
-    }
+  try {
+    const imageBuffer = Buffer.from(await image.arrayBuffer());
+    const feedback = await createFeedback({
+      projectSlug,
+      description,
+      imageBuffer,
+      logs,
+    });
+    return NextResponse.json(
+      { feedbackId: feedback.id },
+      { status: 201, headers: CORS_HEADERS },
+    );
+  } catch (err) {
+    console.error("[api/feedback/add-v2]", err);
+    return NextResponse.json(
+      { error: "failed to create feedback" },
+      { status: 500, headers: CORS_HEADERS },
+    );
+  }
 }
