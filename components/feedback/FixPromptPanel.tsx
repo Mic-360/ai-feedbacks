@@ -131,20 +131,31 @@ export function FixPromptPanel({
       </div>
 
       {!contextReady && (
-        <p className="text-xs text-muted-foreground border border-border/60 bg-muted/20 p-2">
-          Context is still being generated. Generation will be enabled once it&apos;s ready.
+        <p className="ms-cap text-[var(--mute)] border border-[var(--rule)] p-3">
+          House style still being composed. Drafting will resume once it is ready.
         </p>
       )}
 
       {error && (
-        <p className="text-xs text-destructive" role="alert">
+        <p className="text-xs marker italic serif-body" role="alert">
           {error}
         </p>
       )}
 
-      <div className="flex-1 border border-border/60 bg-muted/20 overflow-auto">
-        <pre className="p-3 text-[11px] whitespace-pre-wrap break-words">
-          {current || (isStreaming ? "…" : "No fix yet. Click 'Generate fix' to create one.")}
+      <div
+        className="flex-1 border border-[var(--rule)] overflow-auto"
+        style={{ background: "#fbf7ee" }}
+      >
+        <pre
+          className="p-4 whitespace-pre-wrap break-words"
+          style={{
+            fontFamily: "var(--font-mono), ui-monospace, monospace",
+            fontSize: "13px",
+            lineHeight: 1.6,
+            color: "var(--ink)",
+          }}
+        >
+          {current || (isStreaming ? "…" : "No verdict on file. Press Generate Fix to draft one.")}
         </pre>
       </div>
     </div>
